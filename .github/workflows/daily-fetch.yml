@@ -1,0 +1,32 @@
+name: 自动获取每日食物银行数据
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # 每天 UTC 时间凌晨 2 点（英国时间凌晨 2/3 点）自动运行
+  workflow_dispatch: # 这个配置允许你在 GitHub 网页上点一个按钮手动触发运行
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+        
+      - name: 设置 Node.js 环境
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          
+      - name: 安装 axios 依赖
+        run: npm install axios
+        
+      - name: 运行抓取脚本
+        run: node update-data.js
+        
+      - name: 提交并推送到 GitHub
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/foodbanks-latest.json
+          git commit -m "🤖 自动更新: 抓取最新食物银行数据" || exit 0
+          git push
