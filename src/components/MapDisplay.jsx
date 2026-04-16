@@ -59,10 +59,18 @@ const MapDisplay = ({ data }) => {
             className="custom-popup"
           >
             <div className="popup-content">
-              <h4>{hoverInfo.feature.name}</h4>
-              <p><strong>类型:</strong> {hoverInfo.feature.network || '独立机构'}</p>
+              <h4>{hoverInfo.feature.name || hoverInfo.feature.organisation_name}</h4>
+  
+              {/* 现在可以展示真实的慈善目的了！*/}
+              <p><strong>服务对象/目的:</strong> {hoverInfo.feature.charity_purpose || '无特殊说明'}</p>
+  
               <p><strong>地址:</strong> {hoverInfo.feature.address}</p>
-              {hoverInfo.feature.phone && <p><strong>📞</strong> {hoverInfo.feature.phone}</p>}
+              {hoverInfo.feature.phone_number && <p><strong>📞</strong> {hoverInfo.feature.phone_number}</p>}
+  
+              {/* 甚至可以加上网站链接 */}
+              {hoverInfo.feature.url && (
+                <p><a href={hoverInfo.feature.url} target="_blank" rel="noreferrer">访问官网</a></p>
+              )}
             </div>
           </Popup>
         )}

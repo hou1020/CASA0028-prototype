@@ -4,7 +4,7 @@ const FilterGroup = ({ categories, selectedCategory, onCategoryChange }) => {
   return (
     <div className="filter-section">
       <h3>筛选数据</h3>
-      <p className="filter-subtitle">按机构运营网络 (Network) 分类：</p>
+      <p className="filter-subtitle">按服务对象分类：</p>
       
       <div className="radio-group">
         {categories.map(category => (
