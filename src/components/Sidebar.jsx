@@ -8,7 +8,7 @@ const Sidebar = ({ categories, selectedCategory, onCategoryChange, count, lastUp
       {/* 👈 插入最后更新时间 */}
       <div className="update-status">
         <span className="dot"></span>
-        数据最后同步: {lastUpdated}
+        数据最后同步: {lastUpdated ? lastUpdated : "❌ 没拿到值"}
       </div>
       <p className="description">
         英国食物银行交互式地图原型。数据每日从 Give Food 官方接口自动更新。

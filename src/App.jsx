@@ -87,26 +87,20 @@ function App() {
 
   if (loading) return <div className="loading">📡 解析 CSV 数据中...</div>;
 
-  return (
-    <div className="app-container">
-      <Sidebar 
-        categories={categories}
-        selectedCategory={selectedCategory}
-        onCategoryChange={setSelectedCategory}
-        count={filteredData.length}
-      />
-      <MapDisplay data={filteredData} />
-    </div>
-  );
-
   // 获取今天的日期作为模拟的最后更新时间
-const lastUpdated = new Date().toLocaleString('zh-CN', {
-  month: 'long',
-  day: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: false // 使用 24 小时制，显得更专业、更像监控系统
-});
+  // 1. 创建当前时间，然后把天数减 1（变成昨天）
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    // 2. 格式化为极简的英国时间
+    const lastUpdated = yesterday.toLocaleString('en-GB', {
+      timeZone: 'Europe/London', // 强制锁定英国时区
+      day: 'numeric',            // 如: 19
+      month: 'short',            // 如: Apr (英文简写，显得高级)
+      hour: '2-digit',           // 如: 14
+      minute: '2-digit',         // 如: 30
+      hour12: false              // 24小时制
+    });
 
   return (
     <div className="app-container">
