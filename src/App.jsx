@@ -97,9 +97,6 @@ function App() {
       timeZone: 'Europe/London', // 强制锁定英国时区
       day: 'numeric',            // 如: 19
       month: 'short',            // 如: Apr (英文简写，显得高级)
-      hour: '2-digit',           // 如: 14
-      minute: '2-digit',         // 如: 30
-      hour12: false              // 24小时制
     });
 
   return (
