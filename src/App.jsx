@@ -98,6 +98,28 @@ function App() {
       <MapDisplay data={filteredData} />
     </div>
   );
+
+  // 获取今天的日期作为模拟的最后更新时间
+const lastUpdated = new Date().toLocaleString('zh-CN', {
+  month: 'long',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false // 使用 24 小时制，显得更专业、更像监控系统
+});
+
+  return (
+    <div className="app-container">
+      <Sidebar 
+        categories={categories}
+        selectedCategory={selectedCategory}
+        onCategoryChange={setSelectedCategory}
+        count={filteredData.length}
+        lastUpdated={lastUpdated} // 👈 把时间传给 Sidebar
+      />
+      <MapDisplay data={filteredData} />
+    </div>
+  );
 }
 
 export default App;
