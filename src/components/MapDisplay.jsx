@@ -7,7 +7,6 @@ const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json
 const MapDisplay = ({ data }) => {
   const [hoverInfo, setHoverInfo] = useState(null);
 
-  // 将原始数据转换为 GeoJSON 格式
   const geojsonData = useMemo(() => ({
     type: 'FeatureCollection',
     features: data.map(bank => {
@@ -59,18 +58,100 @@ const MapDisplay = ({ data }) => {
             className="custom-popup"
           >
             <div className="popup-content">
-              <h4>{hoverInfo.feature.name || hoverInfo.feature.organisation_name}</h4>
+              <h4 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>
+                {hoverInfo.feature.name || hoverInfo.feature.organisation_name}
+              </h4>
   
-              {/* 现在可以展示真实的慈善目的了！*/}
-              <p><strong>服务对象/目的:</strong> {hoverInfo.feature.charity_purpose || '无特殊说明'}</p>
-  
-              <p><strong>地址:</strong> {hoverInfo.feature.address}</p>
-              {hoverInfo.feature.phone_number && <p><strong>📞</strong> {hoverInfo.feature.phone_number}</p>}
-  
-              {/* 甚至可以加上网站链接 */}
-              {hoverInfo.feature.url && (
-                <p><a href={hoverInfo.feature.url} target="_blank" rel="noreferrer">访问官网</a></p>
+              <p style={{ margin: '4px 0', fontSize: '13px' }}>
+                <strong>服务对象:</strong> {hoverInfo.feature.charity_purpose || '无特殊说明'}
+              </p>
+              <p style={{ margin: '4px 0', fontSize: '13px' }}>
+                <strong>📍 地址:</strong> {hoverInfo.feature.address}
+              </p>
+              {hoverInfo.feature.phone_number && (
+                <p style={{ margin: '4px 0', fontSize: '13px' }}>
+                  <strong>📞 电话:</strong> {hoverInfo.feature.phone_number}
+                </p>
               )}
+  
+              {/* 动作链接区：顶部分隔线 */}
+              <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                
+                {/* 1. 官方网站链接 (恢复原位并强化显示) */}
+                {hoverInfo.feature.url && (
+                  <a 
+                    href={hoverInfo.feature.url} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    style={{ 
+                      color: '#2563eb', 
+                      textDecoration: 'none', 
+                      fontSize: '14px',
+                      fontWeight: '500',
+                      display: 'flex', 
+                      alignItems: 'center',
+                      gap: '6px',
+                      outline: 'none'
+                    }}
+                  >
+                    🌐 访问官方网站
+                  </a>
+                )}
+
+                {/* 2. 谷歌地图导航卡片 */}
+                {hoverInfo.feature.lat_lng && (
+                  <a 
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${hoverInfo.feature.lat_lng}`} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    style={{ 
+                      display: 'flex',
+                      alignItems: 'center',
+                      backgroundColor: '#f8fafc',
+                      borderRadius: '8px',
+                      padding: '8px',
+                      textDecoration: 'none',
+                      border: '1px solid #e2e8f0',
+                      transition: 'background-color 0.2s',
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f1f5f9'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'}
+                  >
+                    {/* 左侧：Google Maps Iframe 缩略图 */}
+                    <div style={{
+                      width: '60px',
+                      height: '60px',
+                      borderRadius: '6px',
+                      overflow: 'hidden',
+                      marginRight: '12px',
+                      flexShrink: 0,
+                      border: '1px solid #cbd5e1',
+                      backgroundColor: '#e2e8f0'
+                    }}>
+                      <iframe 
+                        title="map-thumbnail"
+                        width="100%" 
+                        height="100%" 
+                        frameBorder="0" 
+                        scrolling="no" 
+                        src={`https://maps.google.com/maps?q=${hoverInfo.feature.lat_lng}&z=14&output=embed`}
+                        style={{ pointerEvents: 'none' }} 
+                      />
+                    </div>
+
+                    {/* 右侧：卡片文字说明 */}
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <span style={{ fontWeight: 'bold', fontSize: '14px', color: '#1e293b' }}>
+                        获取路线
+                      </span>
+                      <span style={{ fontSize: '12px', color: '#3b82f6', marginTop: '2px' }}>
+                        在 Google Maps 中打开 →
+                      </span>
+                    </div>
+                  </a>
+                )}
+
+              </div>
             </div>
           </Popup>
         )}
