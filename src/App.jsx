@@ -1,113 +1,121 @@
 import { useState, useEffect, useMemo } from 'react';
-// 将 axios 替换为 papaparse
 import Papa from 'papaparse'; 
 import Sidebar from './components/Sidebar';
 import MapDisplay from './components/MapDisplay';
+// 如果你之后建立了 NeedsFilter 组件，记得在这里 import
+// import NeedsFilter from './components/NeedsFilter'; 
 import './App.css';
 
-// 文本清洗函数：基于关键词进行归类
+/** 1. 之前的人群分类清洗函数（保留） **/
 function cleanCategory(rawText) {
-  if (!rawText) return "常规基础援助";
-  
-  // 全部转为小写，方便统一匹配
+  if (!rawText) return "其他/常规援助";
   const text = rawText.toLowerCase();
-
-  // 按优先级进行关键词匹配（你可以根据实际情况调整关键词）
-  if (text.includes('child') || text.includes('youth') || text.includes('young') || text.includes('school')) {
-    return "儿童与青少年";
-  }
-  if (text.includes('homeless') || text.includes('housing') || text.includes('rough sleep')) {
-    return "无家可归者救助";
-  }
-  if (text.includes('health') || text.includes('disab') || text.includes('mental') || text.includes('illness')) {
-    return "医疗与残障支持";
-  }
-  if (text.includes('elderly') || text.includes('age') || text.includes('older')) {
-    return "老年人援助";
-  }
-  if (text.includes('christian') || text.includes('church') || text.includes('faith') || text.includes('religion')) {
-    return "宗教信仰组织";
-  }
-  if (text.includes('poverty') || text.includes('hardship') || text.includes('relief')) {
-    return "综合贫困救助";
-  }
-
-  // 如果上面所有的关键词都没命中
+  if (text.includes('child') || text.includes('youth') || text.includes('young') || text.includes('school')) return "儿童与青少年";
+  if (text.includes('homeless') || text.includes('housing') || text.includes('rough sleep')) return "无家可归者救助";
+  if (text.includes('health') || text.includes('disab') || text.includes('mental') || text.includes('illness')) return "医疗与残障支持";
+  if (text.includes('elderly') || text.includes('age') || text.includes('older')) return "老年人援助";
+  if (text.includes('christian') || text.includes('church') || text.includes('faith') || text.includes('religion')) return "宗教信仰组织";
+  if (text.includes('poverty') || text.includes('hardship') || text.includes('relief')) return "综合贫困救助";
   return "其他/常规援助";
+}
+
+/** 2. 新增：物资需求语义分类函数 **/
+function categorizeNeeds(needsText) {
+  const text = needsText ? needsText.toLowerCase() : "";
+  return {
+    "Staple Foods and Grains": /rice|pasta|noodles|cereal|flour|spaghetti|mash/.test(text),
+    "Protein and Canned Goods": /meat|fish|beans|soup|tomatoes|vegetable|tinned|canned/.test(text),
+    "Beverages and Seasonings": /milk|tea|coffee|juice|sugar|oil|sauce|squash/.test(text),
+    "Hygiene Products": /shampoo|deodorant|soap|toothpaste|toilet|washing|shower|gel/.test(text),
+    "Maternal and Infant Products": /baby|nappies|wipes|formula|infant/.test(text)
+  };
+}
+
+/** 3. 新增：紧急程度判断函数（基于时间戳） **/
+function checkUrgency(timestamp) {
+  if (!timestamp) return false;
+  const lastFound = new Date(timestamp);
+  const now = new Date();
+  // 如果是 14 天内更新过需求的，视为“活跃需求/紧急”
+  const diffDays = (now - lastFound) / (1000 * 60 * 60 * 24);
+  return diffDays <= 14; 
 }
 
 function App() {
   const [allData, setAllData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  
+  // 【新增状态】：存储用户选中的物资标签（数组格式）
+  const [selectedNeeds, setSelectedNeeds] = useState([]);
 
   useEffect(() => {
-    // 使用 PapaParse 读取 public 文件夹下的 CSV 文件
     Papa.parse('/foodbanks.csv', {
-      download: true,       // 告诉它这是一个需要下载的文件
-      header: true,         // 自动把第一行作为 JSON 的属性名（也就是能读出 charity_purpose）
-      skipEmptyLines: true, // 跳过空行
+      download: true,
+      header: true,
+      skipEmptyLines: true,
       complete: (results) => {
-        // 过滤掉没有经纬度的数据
-        // const validData = results.data.filter(b => b.lat_lng);
-        const validAndCleanData = results.data
+        const processedData = results.data
           .filter(b => b.lat_lng)
           .map(bank => {
             return {
-              ...bank, // 保留其他所有数据
-              // 强制覆盖 charity_purpose 为清洗后的精简类别
-              charity_purpose: cleanCategory(bank.charity_purpose) 
+              ...bank,
+              // 人群分类清洗
+              charity_purpose: cleanCategory(bank.charity_purpose),
+              // 物资标签提取
+              needsTags: categorizeNeeds(bank.needed_items),
+              // 紧急状态判断
+              isUrgent: checkUrgency(bank.need_found)
             };
           });
-        setAllData(validAndCleanData);
-        setLoading(false);
-      },
-      error: (error) => {
-        console.error("解析 CSV 出错:", error);
+        setAllData(processedData);
         setLoading(false);
       }
     });
   }, []);
 
-  // 修改分类提取逻辑：现在使用 charity_purpose
   const categories = useMemo(() => {
-    // 很多慈善目的可能是一长串话，如果你只想要前几个字，或者某些关键词，可以在这里处理
-    // 比如有的为空，我们就标为 "常规食物援助"
-    const list = allData.map(b => b.charity_purpose || '常规食物援助');
-    
-    // 如果分类太多了会导致左侧塞不下，你可以限制只显示前 15 种最常见的，或者做模糊匹配
+    const list = allData.map(b => b.charity_purpose);
     return ['All', ...new Set(list)];
   }, [allData]);
 
+  // 【核心修改点】：双重联动过滤逻辑
   const filteredData = useMemo(() => {
-    return selectedCategory === 'All' 
-      ? allData 
-      : allData.filter(b => (b.charity_purpose || '常规食物援助') === selectedCategory);
-  }, [allData, selectedCategory]);
+    return allData.filter(item => {
+      // 条件 1: 匹配人群分类
+      const matchCategory = selectedCategory === 'All' || item.charity_purpose === selectedCategory;
 
-  if (loading) return <div className="loading">📡 解析 CSV 数据中...</div>;
+      // 条件 2: 匹配物资标签（如果用户一个物资都没勾，默认显示全部；如果勾了，则需要全部满足）
+      const matchNeeds = selectedNeeds.length === 0 || 
+                         selectedNeeds.every(tag => item.needsTags[tag]);
 
-  // 获取今天的日期作为模拟的最后更新时间
-  // 1. 创建当前时间，然后把天数减 1（变成昨天）
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    // 2. 格式化为极简的英国时间
-    const lastUpdated = yesterday.toLocaleString('en-GB', {
-      timeZone: 'Europe/London', // 强制锁定英国时区
-      day: 'numeric',            // 如: 19
-      month: 'short',            // 如: Apr (英文简写，显得高级)
+      return matchCategory && matchNeeds;
     });
+  }, [allData, selectedCategory, selectedNeeds]);
+
+  if (loading) return <div className="loading">📡 正在构建城市救助网络...</div>;
+
+  const lastUpdated = new Date().toLocaleString('en-GB', {
+    day: 'numeric', month: 'short'
+  });
 
   return (
     <div className="app-container">
+      {/* 在 Sidebar 里，我们之后要加一个新的 prop 处理多选逻辑 */}
       <Sidebar 
         categories={categories}
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
+        
+        // 新增：传给侧边栏处理物资多选
+        selectedNeeds={selectedNeeds}
+        onNeedsChange={setSelectedNeeds}
+        
         count={filteredData.length}
-        lastUpdated={lastUpdated} // 👈 把时间传给 Sidebar
+        lastUpdated={lastUpdated} 
       />
+      
+      {/* MapDisplay 里的点现在带有 isUrgent 和 needsTags 属性了 */}
       <MapDisplay data={filteredData} />
     </div>
   );

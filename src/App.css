@@ -301,3 +301,97 @@ body, html {
   margin-right: 10px;
   accent-color: #3b82f6;
 }
+
+/* 物资筛选容器 */
+.needs-filter-section {
+  margin: 24px 0;
+  padding: 10px 0;
+}
+
+.filter-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #475569; /* 稍微深一点的深灰色 */
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.needs-tags-container {
+  display: flex;
+  flex-wrap: wrap; /* 允许标签自动换行 */
+  gap: 10px;       /* 标签之间的间距 */
+}
+
+/* 标签基础样式 */
+.need-tag {
+  /* 基础布局 */
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 12px; /* 圆角矩形风格，更符合现代仪表盘 */
+  border: 1.5px solid #e2e8f0;
+  background-color: #ffffff;
+  
+  /* 文字样式 */
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* 防止长文本溢出 */
+  white-space: normal;
+  text-align: left;
+  line-height: 1.2;
+}
+
+/* 悬停效果 */
+.need-tag:hover {
+  border-color: var(--tag-color);
+  background-color: #f8fafc;
+  transform: translateY(-1px);
+}
+
+/* 【关键】激活/选中状态 */
+.need-tag.active {
+  background-color: var(--tag-color); /* 读取 Sidebar 传入的颜色 */
+  color: white;
+  border-color: var(--tag-color);
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.15);
+}
+
+/* 清除按钮 */
+.clear-btn {
+  margin-top: 12px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: color 0.2s;
+}
+
+.clear-btn:hover {
+  color: #ef4444; /* 悬停变红，提示删除 */
+  background-color: #fef2f2;
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to right, #e2e8f0, transparent);
+  margin: 20px 0;
+}
+
+/* 统计区域微调 */
+.stats-section {
+  margin-top: auto; /* 推到底部 */
+  padding: 15px;
+  background-color: #f1f5f9;
+  border-radius: 8px;
+  border-left: 4px solid #3b82f6;
+}
