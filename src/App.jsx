@@ -35,12 +35,35 @@ function checkUrgency(timestamp) {
   return diffDays <= 14; 
 }
 
+function getDistanceMiles(origin, latLngText) {
+  if (!origin || !latLngText) return null;
+
+  const [lat, lng] = latLngText.split(',').map(Number);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+
+  const earthRadiusMiles = 3958.8;
+  const toRadians = (value) => (value * Math.PI) / 180;
+  const latDistance = toRadians(lat - origin.latitude);
+  const lngDistance = toRadians(lng - origin.longitude);
+  const startLat = toRadians(origin.latitude);
+  const endLat = toRadians(lat);
+
+  const a = Math.sin(latDistance / 2) ** 2 +
+            Math.cos(startLat) * Math.cos(endLat) *
+            Math.sin(lngDistance / 2) ** 2;
+  return earthRadiusMiles * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
 function FoodbankPage({ role }) {
   const [allData, setAllData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
-  
   const [selectedNeeds, setSelectedNeeds] = useState([]);
+  const [selectedDistance, setSelectedDistance] = useState('all');
+  const [userLocation, setUserLocation] = useState(null);
+  const [locationStatus, setLocationStatus] = useState(() => (
+    typeof navigator !== 'undefined' && "geolocation" in navigator ? 'checking' : 'unsupported'
+  ));
 
   useEffect(() => {
     Papa.parse('/foodbanks.csv', {
@@ -64,6 +87,25 @@ function FoodbankPage({ role }) {
     });
   }, []);
 
+  useEffect(() => {
+    if (!(typeof navigator !== 'undefined' && "geolocation" in navigator)) {
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        });
+        setLocationStatus('ready');
+      },
+      () => {
+        setLocationStatus('unavailable');
+      }
+    );
+  }, []);
+
   const categories = useMemo(() => {
     const list = allData.map(b => b.charity_purpose);
     return ['All', ...new Set(list)];
@@ -74,10 +116,13 @@ function FoodbankPage({ role }) {
       const matchCategory = selectedCategory === 'All' || item.charity_purpose === selectedCategory;
       const matchNeeds = selectedNeeds.length === 0 || 
                          selectedNeeds.every(tag => item.needsTags[tag]);
+      const distanceMiles = getDistanceMiles(userLocation, item.lat_lng);
+      const matchDistance = selectedDistance === 'all' ||
+                            (distanceMiles !== null && distanceMiles <= Number(selectedDistance));
 
-      return matchCategory && matchNeeds;
+      return matchCategory && matchNeeds && matchDistance;
     });
-  }, [allData, selectedCategory, selectedNeeds]);
+  }, [allData, selectedCategory, selectedNeeds, selectedDistance, userLocation]);
 
   if (loading) return <div className="loading">Building the city support network...</div>;
 
@@ -98,6 +143,9 @@ function FoodbankPage({ role }) {
         role={role}
         lastUpdated={lastUpdated}
         matchingCount={filteredData.length}
+        selectedDistance={selectedDistance}
+        onDistanceChange={setSelectedDistance}
+        locationStatus={locationStatus}
       />
       
       <a className="role-switch-button" href={switchTarget}>

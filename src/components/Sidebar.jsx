@@ -1,4 +1,5 @@
 import React from 'react';
+import DistanceFilter from './DistanceFilter';
 import NeedsFilter from './NeedsFilter';
 import ServiceCategoryFilter from './ServiceCategoryFilter';
 
@@ -10,7 +11,10 @@ const Sidebar = ({
   onNeedsChange, 
   role,
   lastUpdated,
-  matchingCount
+  matchingCount,
+  selectedDistance,
+  onDistanceChange,
+  locationStatus
 }) => {
   const isRecipient = role === 'recipient';
 
@@ -32,6 +36,12 @@ const Sidebar = ({
             onCategoryChange={onCategoryChange}
           />
 
+          <DistanceFilter
+            selectedDistance={selectedDistance}
+            onDistanceChange={onDistanceChange}
+            locationStatus={locationStatus}
+          />
+
           <div className="emergency-box">
             <div className="emergency-header">
               <span className="emergency-icon">⚠️</span>
@@ -45,10 +55,18 @@ const Sidebar = ({
           </div>
         </>
       ) : (
-        <NeedsFilter
-          selectedNeeds={selectedNeeds}
-          onNeedsChange={onNeedsChange}
-        />
+        <>
+          <NeedsFilter
+            selectedNeeds={selectedNeeds}
+            onNeedsChange={onNeedsChange}
+          />
+
+          <DistanceFilter
+            selectedDistance={selectedDistance}
+            onDistanceChange={onDistanceChange}
+            locationStatus={locationStatus}
+          />
+        </>
       )}
 
       <div className="stats-section">

@@ -613,6 +613,53 @@ body, html {
   padding: 18px;
 }
 
+.distance-filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.distance-select-label {
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.distance-select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #f8fafc;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.distance-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.distance-select:focus {
+  border-color: #60a5fa;
+  outline: 2px solid rgba(96, 165, 250, 0.26);
+  outline-offset: 2px;
+}
+
+.distance-status {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.distance-status.ready {
+  color: #86efac;
+}
+
 .needs-tags-container {
   display: grid;
   grid-template-columns: 1fr;

@@ -3,6 +3,10 @@ import { Map, Source, Layer, Popup, NavigationControl, GeolocateControl } from '
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
+const UK_MAP_BOUNDS = [
+  [-11.5, 48.4],
+  [4.2, 62.2]
+];
 
 const categoryColors = {
   "Children and Young People": "#3b82f6",
@@ -131,6 +135,7 @@ const MapDisplay = ({ data }) => {
       <Map
         {...viewState}
         minZoom={5.5}
+        maxBounds={UK_MAP_BOUNDS}
         onMove={evt => setViewState(evt.viewState)}
         mapStyle={MAP_STYLE}
         interactiveLayerIds={['foodbank-points']}
