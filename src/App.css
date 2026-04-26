@@ -656,9 +656,11 @@ body, html {
 /* Map popup presentation */
 .custom-popup {
   z-index: 30;
+  pointer-events: auto;
 }
 
 .custom-popup .maplibregl-popup-content {
+  pointer-events: auto;
   width: min(360px, calc(100vw - 36px));
   max-width: min(360px, calc(100vw - 36px)) !important;
   padding: 0;

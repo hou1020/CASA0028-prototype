@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { Map, Source, Layer, Popup, NavigationControl, GeolocateControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -27,9 +27,25 @@ const CATEGORY_COLOR_MAP = [
 
 const MapDisplay = ({ data }) => {
   const [hoverInfo, setHoverInfo] = useState(null);
+  const closeTimerRef = useRef(null);
   const [viewState, setViewState] = useState({
     longitude: -2.0, latitude: 54.0, zoom: 5.5
   });
+
+  const clearCloseTimer = useCallback(() => {
+    if (closeTimerRef.current) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
+
+  const schedulePopupClose = useCallback(() => {
+    clearCloseTimer();
+    closeTimerRef.current = window.setTimeout(() => {
+      setHoverInfo(null);
+      closeTimerRef.current = null;
+    }, 250);
+  }, [clearCloseTimer]);
 
   useEffect(() => {
     if ("geolocation" in navigator) {
@@ -42,6 +58,10 @@ const MapDisplay = ({ data }) => {
       });
     }
   }, []);
+
+  useEffect(() => {
+    return () => clearCloseTimer();
+  }, [clearCloseTimer]);
 
   const geojsonData = useMemo(() => ({
     type: 'FeatureCollection',
@@ -73,8 +93,13 @@ const MapDisplay = ({ data }) => {
   const onHover = useCallback(event => {
     const { features, lngLat: { lng, lat } } = event;
     const hoveredFeature = features && features[0];
-    setHoverInfo(hoveredFeature ? { feature: hoveredFeature.properties, lng, lat } : null);
-  }, []);
+    if (hoveredFeature) {
+      clearCloseTimer();
+      setHoverInfo({ feature: hoveredFeature.properties, lng, lat });
+    } else {
+      schedulePopupClose();
+    }
+  }, [clearCloseTimer, schedulePopupClose]);
 
   const renderNeedsIcons = (tagsJson) => {
     const tags = JSON.parse(tagsJson || "{}");
@@ -110,7 +135,7 @@ const MapDisplay = ({ data }) => {
         mapStyle={MAP_STYLE}
         interactiveLayerIds={['foodbank-points']}
         onMouseMove={onHover}
-        onMouseLeave={() => setHoverInfo(null)}
+        onMouseLeave={schedulePopupClose}
       >
         <NavigationControl position="top-right" />
         <GeolocateControl position="top-right" trackUserLocation={true} />
@@ -126,7 +151,11 @@ const MapDisplay = ({ data }) => {
             closeButton={false}
             className="custom-popup"
           >
-            <div className="popup-content">
+            <div
+              className="popup-content"
+              onMouseEnter={clearCloseTimer}
+              onMouseLeave={schedulePopupClose}
+            >
               
               {hoverInfo.feature.isUrgent && (
                 <div className="popup-urgent-badge">
