@@ -1,23 +1,23 @@
 import React from 'react';
 
 const categoryColors = {
-  "儿童与青少年": "#3b82f6",
-  "无家可归者救助": "#f97316",
-  "医疗与残障支持": "#10b981",
-  "老年人援助": "#8b5cf6",
-  "宗教信仰组织": "#64748b",
-  "综合贫困救助": "#ef4444",
+  "Children and Young People": "#3b82f6",
+  "Homelessness Support": "#f97316",
+  "Health and Disability Support": "#10b981",
+  "Older People Support": "#8b5cf6",
+  "Faith-Based Organisations": "#64748b",
+  "Poverty Relief": "#ef4444",
   "All": "#3b82f6",
-  "其他/常规援助": "#94a3b8"
+  "Other / General Support": "#94a3b8"
 };
 
 const ServiceCategoryFilter = ({ categories, selectedCategory, onCategoryChange }) => {
   return (
     <section className="sidebar-section">
-      <h4 className="filter-title">服务对象分类</h4>
+      <h4 className="filter-title">Service User Category</h4>
       <div className="filter-group">
-        <h3>资源筛选</h3>
-        <p className="filter-subtitle">按服务对象分类，提升定位效率：</p>
+        <h3>Resource Filter</h3>
+        <p className="filter-subtitle">Filter by service user category to improve search accuracy:</p>
 
         <div className="radio-group">
           {categories.map(category => {

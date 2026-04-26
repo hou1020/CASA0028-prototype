@@ -3,27 +3,27 @@ import React from 'react';
 const needsConfig = [
   {
     id: "Staple Foods and Grains",
-    label: '🍚 主食谷物',
+    label: '🍚 Staples and Grains',
     color: '#3498db'
   },
   {
     id: "Protein and Canned Goods",
-    label: '🥩 蛋白质/罐头',
+    label: '🥩 Protein and Canned Goods',
     color: '#e67e22'
   },
   {
     id: "Beverages and Seasonings",
-    label: '☕ 饮品调味',
+    label: '☕ Drinks and Seasonings',
     color: '#f1c40f'
   },
   {
     id: "Hygiene Products",
-    label: '🧼 个人卫生',
+    label: '🧼 Hygiene Products',
     color: '#9b59b6'
   },
   {
     id: "Maternal and Infant Products",
-    label: '🍼 母婴专项',
+    label: '🍼 Baby and Maternal Items',
     color: '#e91e63'
   }
 ];
@@ -39,7 +39,7 @@ const NeedsFilter = ({ selectedNeeds, onNeedsChange }) => {
 
   return (
     <section className="sidebar-section needs-filter-section">
-      <h4 className="filter-title">急需物资筛选 (可多选)</h4>
+      <h4 className="filter-title">Urgent Needs Filter (multi-select)</h4>
       <div className="needs-tags-container">
         {needsConfig.map(need => {
           const isSelected = selectedNeeds.includes(need.id);
@@ -60,7 +60,7 @@ const NeedsFilter = ({ selectedNeeds, onNeedsChange }) => {
         })}
       </div>
       {selectedNeeds.length > 0 && (
-        <button className="clear-btn" onClick={() => onNeedsChange([])}>清除物资筛选</button>
+        <button className="clear-btn" onClick={() => onNeedsChange([])}>Clear needs filter</button>
       )}
     </section>
   );

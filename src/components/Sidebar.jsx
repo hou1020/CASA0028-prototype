@@ -10,7 +10,7 @@ const Sidebar = ({
   onNeedsChange, 
   role,
   lastUpdated,
-  totalCount
+  matchingCount
 }) => {
   const isRecipient = role === 'recipient';
 
@@ -20,7 +20,7 @@ const Sidebar = ({
         <h1 className="title">Give Food API</h1>
         <div className="update-status">
           <span className="dot"></span>
-          数据最后同步: {lastUpdated ? lastUpdated : "尚未更新"}
+          Last data sync: {lastUpdated ? lastUpdated : "Not updated yet"}
         </div>
       </header>
 
@@ -35,12 +35,12 @@ const Sidebar = ({
           <div className="emergency-box">
             <div className="emergency-header">
               <span className="emergency-icon">⚠️</span>
-              <h4>紧急安全提示</h4>
+              <h4>Emergency Safety Notice</h4>
             </div>
-            <p>如果您正处于即刻的生存危机中：</p>
+            <p>If you are in an immediate survival crisis:</p>
             <div className="emergency-buttons">
-              <a href="tel:999" className="emergency-link">拨打 999 (紧急)</a>
-              <a href="tel:111" className="emergency-link secondary">拨打 111 (医疗)</a>
+              <a href="tel:999" className="emergency-link">Call 999 (Emergency)</a>
+              <a href="tel:111" className="emergency-link secondary">Call 111 (Medical)</a>
             </div>
           </div>
         </>
@@ -52,7 +52,7 @@ const Sidebar = ({
       )}
 
       <div className="stats-section">
-        <p>一共有多少条数据：<strong>{totalCount}</strong> 条</p>
+        <p>Matching locations: <strong>{matchingCount}</strong></p>
       </div>
     </aside>
   );

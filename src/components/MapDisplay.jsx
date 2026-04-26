@@ -4,26 +4,24 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 
 const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
 
-// 1. 颜色映射表（用于弹窗左侧的装饰条）
 const categoryColors = {
-  "儿童与青少年": "#3b82f6",
-  "无家空归者救助": "#f97316",
-  "医疗与残障支持": "#10b981",
-  "老年人援助": "#8b5cf6",
-  "宗教信仰组织": "#64748b",
-  "综合贫困救助": "#ef4444"
+  "Children and Young People": "#3b82f6",
+  "Homelessness Support": "#f97316",
+  "Health and Disability Support": "#10b981",
+  "Older People Support": "#8b5cf6",
+  "Faith-Based Organisations": "#64748b",
+  "Poverty Relief": "#ef4444"
 };
 
-// 2. 地图图层颜色逻辑
 const CATEGORY_COLOR_MAP = [
   'match',
   ['get', 'charity_purpose'],
-  '儿童与青少年', '#3b82f6',
-  '无家空归者救助', '#f97316',
-  '医疗与残障支持', '#10b981',
-  '老年人援助', '#8b5cf6',
-  '宗教信仰组织', '#64748b',
-  '综合贫困救助', '#ef4444',
+  'Children and Young People', '#3b82f6',
+  'Homelessness Support', '#f97316',
+  'Health and Disability Support', '#10b981',
+  'Older People Support', '#8b5cf6',
+  'Faith-Based Organisations', '#64748b',
+  'Poverty Relief', '#ef4444',
   '#94a3b8' 
 ];
 
@@ -33,7 +31,6 @@ const MapDisplay = ({ data }) => {
     longitude: -2.0, latitude: 54.0, zoom: 5.5
   });
 
-  // 自动定位
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -79,15 +76,14 @@ const MapDisplay = ({ data }) => {
     setHoverInfo(hoveredFeature ? { feature: hoveredFeature.properties, lng, lat } : null);
   }, []);
 
-  // 物资图标渲染函数
   const renderNeedsIcons = (tagsJson) => {
     const tags = JSON.parse(tagsJson || "{}");
     const icons = [
-      { key: "Staple Foods and Grains", icon: "🍚", label: "主食" },
-      { key: "Protein and Canned Goods", icon: "🥩", label: "蛋白质" },
-      { key: "Beverages and Seasonings", icon: "☕", label: "饮品" },
-      { key: "Hygiene Products", icon: "🧼", label: "卫生" },
-      { key: "Maternal and Infant Products", icon: "🍼", label: "母婴" }
+      { key: "Staple Foods and Grains", icon: "🍚", label: "Staples" },
+      { key: "Protein and Canned Goods", icon: "🥩", label: "Protein" },
+      { key: "Beverages and Seasonings", icon: "☕", label: "Drinks" },
+      { key: "Hygiene Products", icon: "🧼", label: "Hygiene" },
+      { key: "Maternal and Infant Products", icon: "🍼", label: "Baby and Maternal" }
     ];
 
     return (
@@ -132,33 +128,28 @@ const MapDisplay = ({ data }) => {
           >
             <div className="popup-content">
               
-              {/* 1. 紧急状态标签 */}
               {hoverInfo.feature.isUrgent && (
                 <div className="popup-urgent-badge">
-                  🔥 需求紧迫 (14天内有更新)
+                  🔥 Urgent need (updated within 14 days)
                 </div>
               )}
 
-              {/* 2. 名称 */}
               <h4 className="popup-title">
                 {hoverInfo.feature.name || hoverInfo.feature.organisation_name}
               </h4>
 
-              {/* 3. 分类标签 */}
               <div
                 className="popup-category"
                 style={{ borderLeftColor: categoryColors[hoverInfo.feature.charity_purpose] || '#94a3b8' }}
               >
-                <strong>服务类别:</strong> {hoverInfo.feature.charity_purpose}
+                <strong>Service category:</strong> {hoverInfo.feature.charity_purpose}
               </div>
 
-              {/* 4. 物资需求展示区 */}
               <div className="popup-needs-card">
-                <div className="popup-needs-title">当前急需物资：</div>
+                <div className="popup-needs-title">Current urgent needs:</div>
                 {renderNeedsIcons(hoverInfo.feature.needsTagsJson)}
               </div>
 
-              {/* 5. 地址与电话 */}
               <div className="popup-contact">
                 <p>📍 {hoverInfo.feature.address}</p>
                 {hoverInfo.feature.phone_number && (
@@ -168,26 +159,23 @@ const MapDisplay = ({ data }) => {
                 )}
               </div>
 
-              {/* 6. 操作链接区 */}
               <div className="popup-actions">
                 
-                {/* 访问官网链接 */}
                 {hoverInfo.feature.url && (
                   <a href={hoverInfo.feature.url} target="_blank" rel="noreferrer" 
                      className="popup-website-link">
-                    🌐 访问官方网站 →
+                    🌐 Visit official website →
                   </a>
                 )}
 
-                {/* Google Maps 导航卡片 */}
                 <a 
                   href={`https://www.google.com/maps/dir/?api=1&destination=${hoverInfo.lat},${hoverInfo.lng}`}
                   target="_blank" rel="noreferrer"
                   className="popup-directions-link"
                 >
                   <div>
-                    <span>获取导航路线</span>
-                    <span>在 Google Maps 中规划路径</span>
+                    <span>Get directions</span>
+                    <span>Plan your route in Google Maps</span>
                   </div>
                 </a>
               </div>

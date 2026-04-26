@@ -1,10 +1,10 @@
-/* 1. 彻底重置基础样式，覆盖所有默认行为 */
+/* Base reset */
 body, html {
   margin: 0;
   padding: 0;
   width: 100vw;
   height: 100vh;
-  overflow: hidden; /* 防止出现多余的滚动条 */
+  overflow: hidden;
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -121,7 +121,7 @@ body, html {
   }
 }
 
-/* 2. 整体容器：开启 Flexbox 左右布局 */
+/* Main two-column layout */
 .app-container {
   display: flex;
   width: 100vw;
@@ -158,7 +158,7 @@ body, html {
   outline: none;
 }
 
-/* 3. 左侧侧边栏样式 */
+/* Sidebar */
 .sidebar {
   width: 320px;
   background-color: #1e293b;
@@ -229,14 +229,14 @@ body, html {
   color: #94a3b8;
 }
 
-/* 4. 右侧地图包裹区 (极其重要！) */
+/* Map wrapper */
 .map-wrapper {
-  flex: 1; /* 让地图填满右侧所有剩余空间 */
-  height: 100vh; /* 必须给地图高度，否则会消失！ */
+  flex: 1;
+  height: 100vh;
   position: relative;
 }
 
-/* 5. 气泡悬浮框样式 */
+/* Popup styles */
 .popup-content {
   color: #333;
   font-size: 13px;
@@ -265,45 +265,45 @@ body, html {
   display: none;
 }
 
-/* 侧边栏美化
-/* 1. 基础样式优化：让选项看起来像可以点击的卡片 */
+/* Sidebar polish */
+/* Clickable option cards */
 .radio-label {
   display: flex;
   align-items: center;
   padding: 10px 14px;
   margin-bottom: 8px;
   border-radius: 8px;
-  background-color: #334155; /* 默认的深灰色 */
-  transition: all 0.2s ease; /* 增加平滑过渡动画 */
+  background-color: #334155;
+  transition: all 0.2s ease;
   cursor: pointer;
   border: 1px solid transparent;
 }
 
-/* 2. 悬浮效果：鼠标滑过时变亮一点 */
+/* Hover state */
 .radio-label:hover {
   background-color: #475569;
 }
 
-/* 3. 核心：被选中（Active）时的样式 */
+/* Active state */
 .radio-label.active {
-  background-color: #3b82f6; /* 变成明亮的蓝色 */
+  background-color: #3b82f6;
   color: #ffffff;
   border-color: #60a5fa;
-  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4); /* 增加发光感 */
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
   font-weight: bold;
 }
 
-/* 隐藏原本丑丑的单选框圆点（可选，如果你想做成纯按钮样式） */
+/* Radio input polish */
 .radio-label input {
   margin-right: 12px;
-  accent-color: #ffffff; /* 改变圆点颜色 */
+  accent-color: #ffffff;
 }
 
 .emergency-box {
   margin-top: 20px;
   padding: 15px;
-  background-color: rgba(220, 38, 38, 0.1); /* 极浅的红色背景 */
-  border-left: 4px solid #ef4444; /* 左侧红色警示条 */
+  background-color: rgba(220, 38, 38, 0.1);
+  border-left: 4px solid #ef4444;
   border-radius: 4px;
 }
 
@@ -316,7 +316,7 @@ body, html {
 
 .emergency-header h4 {
   margin: 0;
-  color: #f87171; /* 警示红 */
+  color: #f87171;
   font-size: 15px;
 }
 
@@ -366,10 +366,10 @@ body, html {
 .dot {
   width: 8px;
   height: 8px;
-  background-color: #22c55e; /* 绿色代表正常运行 */
+  background-color: #22c55e;
   border-radius: 50%;
   display: inline-block;
-  animation: pulse 2s infinite; /* 呼吸灯动画 */
+  animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
@@ -407,21 +407,21 @@ body, html {
   align-items: center;
   padding: 10px 15px;
   margin-bottom: 8px;
-  background-color: #1e293b; /* 默认底色 */
+  background-color: #1e293b;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
   color: #cbd5e1;
-  border: 1px solid transparent; /* 预留边框位置 */
+  border: 1px solid transparent;
 }
 
-/* 选中时的文字加亮 */
+/* Active text */
 .radio-label.active {
   color: #ffffff;
   font-weight: bold;
 }
 
-/* 分类小圆点 */
+/* Category dot */
 .category-dot {
   width: 8px;
   height: 8px;
@@ -430,13 +430,13 @@ body, html {
   flex-shrink: 0;
 }
 
-/* 隐藏原生 radio 按钮（可选，做成纯卡片式设计更高级） */
+/* Radio input */
 .radio-label input {
   margin-right: 10px;
   accent-color: #3b82f6;
 }
 
-/* 物资筛选容器 */
+/* Needs filter */
 .needs-filter-section {
   margin: 24px 0;
   padding: 10px 0;
@@ -445,7 +445,7 @@ body, html {
 .filter-title {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #475569; /* 稍微深一点的深灰色 */
+  color: #475569;
   margin-bottom: 12px;
   display: flex;
   align-items: center;
@@ -454,49 +454,49 @@ body, html {
 
 .needs-tags-container {
   display: flex;
-  flex-wrap: wrap; /* 允许标签自动换行 */
-  gap: 10px;       /* 标签之间的间距 */
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-/* 标签基础样式 */
+/* Tag base */
 .need-tag {
-  /* 基础布局 */
+  /* Layout */
   display: inline-flex;
   align-items: center;
   padding: 8px 14px;
-  border-radius: 12px; /* 圆角矩形风格，更符合现代仪表盘 */
+  border-radius: 12px;
   border: 1.5px solid #e2e8f0;
   background-color: #ffffff;
   
-  /* 文字样式 */
+  /* Typography */
   font-size: 0.8rem;
   font-weight: 500;
   color: #64748b;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   
-  /* 防止长文本溢出 */
+  /* Prevent long text overflow */
   white-space: normal;
   text-align: left;
   line-height: 1.2;
 }
 
-/* 悬停效果 */
+/* Hover state */
 .need-tag:hover {
   border-color: var(--tag-color);
   background-color: #f8fafc;
   transform: translateY(-1px);
 }
 
-/* 【关键】激活/选中状态 */
+/* Active state */
 .need-tag.active {
-  background-color: var(--tag-color); /* 读取 Sidebar 传入的颜色 */
+  background-color: var(--tag-color);
   color: white;
   border-color: var(--tag-color);
   box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.15);
 }
 
-/* 清除按钮 */
+/* Clear button */
 .clear-btn {
   margin-top: 12px;
   background: none;
@@ -510,7 +510,7 @@ body, html {
 }
 
 .clear-btn:hover {
-  color: #ef4444; /* 悬停变红，提示删除 */
+  color: #ef4444;
   background-color: #fef2f2;
 }
 
@@ -521,9 +521,9 @@ body, html {
   margin: 20px 0;
 }
 
-/* 统计区域微调 */
+/* Stats area */
 .stats-section {
-  margin-top: auto; /* 推到底部 */
+  margin-top: auto;
   padding: 15px;
   background-color: #f1f5f9;
   border-radius: 8px;
