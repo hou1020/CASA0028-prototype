@@ -91,16 +91,12 @@ const MapDisplay = ({ data }) => {
     ];
 
     return (
-      <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+      <div className="popup-needs-icons">
         {icons.map(item => (
           <span 
             key={item.key} 
             title={item.label}
-            style={{ 
-              filter: tags[item.key] ? 'grayscale(0)' : 'grayscale(1)', 
-              opacity: tags[item.key] ? 1 : 0.15,
-              fontSize: '20px'
-            }}
+            className={`popup-need-icon ${tags[item.key] ? 'active' : ''}`}
           >
             {item.icon}
           </span>
@@ -113,6 +109,7 @@ const MapDisplay = ({ data }) => {
     <div className="map-wrapper">
       <Map
         {...viewState}
+        minZoom={5.5}
         onMove={evt => setViewState(evt.viewState)}
         mapStyle={MAP_STYLE}
         interactiveLayerIds={['foodbank-points']}
@@ -133,52 +130,51 @@ const MapDisplay = ({ data }) => {
             closeButton={false}
             className="custom-popup"
           >
-            <div className="popup-content" style={{ minWidth: '250px' }}>
+            <div className="popup-content">
               
               {/* 1. 紧急状态标签 */}
               {hoverInfo.feature.isUrgent && (
-                <div style={{ backgroundColor: '#ef4444', color: 'white', fontSize: '10px', padding: '2px 8px', borderRadius: '4px', width: 'fit-content', marginBottom: '8px', fontWeight: 'bold' }}>
+                <div className="popup-urgent-badge">
                   🔥 需求紧迫 (14天内有更新)
                 </div>
               )}
 
               {/* 2. 名称 */}
-              <h4 style={{ margin: '0 0 6px 0', fontSize: '16px', color: '#1e293b' }}>
+              <h4 className="popup-title">
                 {hoverInfo.feature.name || hoverInfo.feature.organisation_name}
               </h4>
 
               {/* 3. 分类标签 */}
-              <div style={{ 
-                margin: '8px 0', padding: '4px 8px', fontSize: '11px', backgroundColor: '#f1f5f9',
-                borderLeft: `4px solid ${categoryColors[hoverInfo.feature.charity_purpose] || '#94a3b8'}`,
-                color: '#475569'
-              }}>
+              <div
+                className="popup-category"
+                style={{ borderLeftColor: categoryColors[hoverInfo.feature.charity_purpose] || '#94a3b8' }}
+              >
                 <strong>服务类别:</strong> {hoverInfo.feature.charity_purpose}
               </div>
 
               {/* 4. 物资需求展示区 */}
-              <div style={{ margin: '12px 0', padding: '10px', backgroundColor: '#fffdf5', borderRadius: '8px', border: '1px solid #fef3c7' }}>
-                <div style={{ fontSize: '11px', color: '#92400e', fontWeight: 'bold', marginBottom: '4px' }}>当前急需物资：</div>
+              <div className="popup-needs-card">
+                <div className="popup-needs-title">当前急需物资：</div>
                 {renderNeedsIcons(hoverInfo.feature.needsTagsJson)}
               </div>
 
               {/* 5. 地址与电话 */}
-              <div style={{ fontSize: '12px', color: '#475569', lineHeight: '1.4' }}>
-                <p style={{ margin: '2px 0' }}>📍 {hoverInfo.feature.address}</p>
+              <div className="popup-contact">
+                <p>📍 {hoverInfo.feature.address}</p>
                 {hoverInfo.feature.phone_number && (
-                  <p style={{ margin: '4px 0', color: '#2563eb', fontWeight: 'bold' }}>
-                    📞 <a href={`tel:${hoverInfo.feature.phone_number}`} style={{ color: 'inherit', textDecoration: 'none' }}>{hoverInfo.feature.phone_number}</a>
+                  <p className="popup-phone">
+                    📞 <a href={`tel:${hoverInfo.feature.phone_number}`}>{hoverInfo.feature.phone_number}</a>
                   </p>
                 )}
               </div>
 
               {/* 6. 操作链接区 */}
-              <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid #f1f5f9', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div className="popup-actions">
                 
                 {/* 访问官网链接 */}
                 {hoverInfo.feature.url && (
                   <a href={hoverInfo.feature.url} target="_blank" rel="noreferrer" 
-                     style={{ color: '#2563eb', textDecoration: 'none', fontSize: '12px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                     className="popup-website-link">
                     🌐 访问官方网站 →
                   </a>
                 )}
@@ -187,14 +183,11 @@ const MapDisplay = ({ data }) => {
                 <a 
                   href={`https://www.google.com/maps/dir/?api=1&destination=${hoverInfo.lat},${hoverInfo.lng}`}
                   target="_blank" rel="noreferrer"
-                  style={{ 
-                    display: 'flex', alignItems: 'center', backgroundColor: '#f8fafc', 
-                    borderRadius: '8px', padding: '8px', textDecoration: 'none', border: '1px solid #e2e8f0' 
-                  }}
+                  className="popup-directions-link"
                 >
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <span style={{ fontWeight: 'bold', fontSize: '12px', color: '#1e293b' }}>获取导航路线</span>
-                    <span style={{ fontSize: '10px', color: '#3b82f6' }}>在 Google Maps 中规划路径</span>
+                  <div>
+                    <span>获取导航路线</span>
+                    <span>在 Google Maps 中规划路径</span>
                   </div>
                 </a>
               </div>

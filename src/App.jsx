@@ -41,7 +41,7 @@ function checkUrgency(timestamp) {
   return diffDays <= 14; 
 }
 
-function App() {
+function FoodbankPage({ role }) {
   const [allData, setAllData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -95,30 +95,72 @@ function App() {
 
   if (loading) return <div className="loading">📡 正在构建城市救助网络...</div>;
 
+  const switchTarget = role === 'recipient' ? '/volunteer' : '/recipient';
+  const switchLabel = role === 'recipient' ? '切换至志愿者' : '切换至受助者';
   const lastUpdated = new Date().toLocaleString('en-GB', {
     day: 'numeric', month: 'short'
   });
 
   return (
     <div className="app-container">
-      {/* 在 Sidebar 里，我们之后要加一个新的 prop 处理多选逻辑 */}
       <Sidebar 
         categories={categories}
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
-        
-        // 新增：传给侧边栏处理物资多选
         selectedNeeds={selectedNeeds}
         onNeedsChange={setSelectedNeeds}
-        
-        count={filteredData.length}
-        lastUpdated={lastUpdated} 
+        role={role}
+        lastUpdated={lastUpdated}
+        totalCount={allData.length}
       />
       
+      <a className="role-switch-button" href={switchTarget}>
+        {switchLabel}
+      </a>
+
       {/* MapDisplay 里的点现在带有 isUrgent 和 needsTags 属性了 */}
       <MapDisplay data={filteredData} />
     </div>
   );
+}
+
+function HomePage() {
+  return (
+    <main className="home-page">
+      <section className="home-panel" aria-labelledby="home-title">
+        <p className="home-kicker">Community Food Support Network</p>
+        <h1 id="home-title">请选择你的身份</h1>
+        <p className="home-copy">
+          根据你的身份进入对应页面。当前两个页面先共用现有地图与筛选功能，后续可以再分别扩展不同流程。
+        </p>
+
+        <div className="role-actions" aria-label="选择身份">
+          <a className="role-card recipient" href="/recipient">
+            <span className="role-label">我是受助者</span>
+            <span className="role-description">查找附近食物银行与可获得的物资支持</span>
+          </a>
+          <a className="role-card volunteer" href="/volunteer">
+            <span className="role-label">我是志愿者</span>
+            <span className="role-description">查看当前需求并了解可以参与支持的地点</span>
+          </a>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function App() {
+  const path = window.location.pathname.replace(/\/$/, '') || '/';
+
+  if (path === '/recipient') {
+    return <FoodbankPage role="recipient" />;
+  }
+
+  if (path === '/volunteer') {
+    return <FoodbankPage role="volunteer" />;
+  }
+
+  return <HomePage />;
 }
 
 export default App;
