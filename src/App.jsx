@@ -35,7 +35,6 @@ function checkUrgency(timestamp) {
   return diffDays <= 14; 
 }
 
-<<<<<<< HEAD
 function getDistanceMiles(origin, latLngText) {
   if (!origin || !latLngText) return null;
 
@@ -55,13 +54,10 @@ function getDistanceMiles(origin, latLngText) {
   return earthRadiusMiles * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-=======
->>>>>>> e13439c (feat: change color design)
 function FoodbankPage({ role }) {
   const [allData, setAllData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
-<<<<<<< HEAD
   const [selectedNeeds, setSelectedNeeds] = useState([]);
   const [selectedDistance, setSelectedDistance] = useState('all');
   const [userLocation, setUserLocation] = useState(null);
@@ -117,69 +113,26 @@ function FoodbankPage({ role }) {
 
   const filteredData = useMemo(() => {
     return allData.filter(item => {
+      // 1. 类别过滤
       const matchCategory = selectedCategory === 'All' || item.charity_purpose === selectedCategory;
+      
+      // 2. 需求过滤
       const matchNeeds = selectedNeeds.length === 0 || 
                          selectedNeeds.every(tag => item.needsTags[tag]);
+
+      // 3. 距离过滤
       const distanceMiles = getDistanceMiles(userLocation, item.lat_lng);
       const matchDistance = selectedDistance === 'all' ||
                             (distanceMiles !== null && distanceMiles <= Number(selectedDistance));
 
-      return matchCategory && matchNeeds && matchDistance;
+      // 4. 角色过滤逻辑 (新加入的)
+      const hasAnySpecificNeed = Object.values(item.needsTags || {}).some(val => val === true);
+      const roleFilter = role === 'volunteer' ? hasAnySpecificNeed : true;
+
+      return matchCategory && matchNeeds && matchDistance && roleFilter;
     });
-  }, [allData, selectedCategory, selectedNeeds, selectedDistance, userLocation]);
-=======
+  }, [allData, selectedCategory, selectedNeeds, selectedDistance, userLocation, role]);
   
-  const [selectedNeeds, setSelectedNeeds] = useState([]);
-
-  useEffect(() => {
-    Papa.parse('/foodbanks.csv', {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        const processedData = results.data
-          .filter(b => b.lat_lng)
-          .map(bank => {
-            return {
-              ...bank,
-              charity_purpose: cleanCategory(bank.charity_purpose),
-              needsTags: categorizeNeeds(bank.needed_items),
-              isUrgent: checkUrgency(bank.need_found)
-            };
-          });
-        setAllData(processedData);
-        setLoading(false);
-      }
-    });
-  }, []);
-
-  const categories = useMemo(() => {
-    const list = allData.map(b => b.charity_purpose);
-    return ['All', ...new Set(list)];
-  }, [allData]);
-
-  const filteredData = useMemo(() => {
-  return allData.filter(item => {
-    // 1. 类别过滤（保持不变）
-    const matchCategory = selectedCategory === 'All' || item.charity_purpose === selectedCategory;
-    
-    // 2. 需求过滤（保持不变）
-    const matchNeeds = selectedNeeds.length === 0 || 
-                       selectedNeeds.every(tag => item.needsTags[tag]);
-
-    // 3. 【核心修改】角色过滤逻辑
-    // 只要 needsTags 里有任何一个项目是 true，就代表它“有需求”
-    const hasAnySpecificNeed = Object.values(item.needsTags || {}).some(val => val === true);
-    
-    // 如果是志愿者模式：只显示有需求的 (hasAnySpecificNeed 为 true)
-    // 如果是求助者模式：显示所有 (或者你也可以根据需要给求助者也开启这个过滤)
-    const roleFilter = role === 'volunteer' ? hasAnySpecificNeed : true;
-
-    return matchCategory && matchNeeds && roleFilter;
-  });
-}, [allData, selectedCategory, selectedNeeds, role]);
->>>>>>> e13439c (feat: change color design)
-
   if (loading) return <div className="loading">Building the city support network...</div>;
 
   const switchTarget = role === 'recipient' ? '/volunteer' : '/recipient';
