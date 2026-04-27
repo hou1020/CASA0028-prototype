@@ -1355,18 +1355,22 @@ aside.sidebar input + span {
   #root {
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
   }
 
   .home-page-v2 {
     align-items: flex-start;
-    min-height: 100vh;
+    height: auto;
+    min-height: 100dvh;
     padding: 24px 16px;
+    box-sizing: border-box;
+    overflow-x: hidden;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .home-content {
     width: 100%;
+    padding-bottom: 32px;
   }
 
   .hero-section {
@@ -1389,6 +1393,7 @@ aside.sidebar input + span {
     gap: 16px;
     width: 100%;
     margin-top: 24px;
+    padding-bottom: 24px;
   }
 
   .role-card-v2 {
