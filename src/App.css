@@ -1348,3 +1348,129 @@ aside.sidebar input + span {
 .sidebar .stats-section strong {
     color: #ffffff !important;
 }
+
+@media (max-width: 768px) {
+  body,
+  html,
+  #root {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .home-page-v2 {
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 24px 16px;
+    overflow-y: auto;
+  }
+
+  .home-content {
+    width: 100%;
+  }
+
+  .hero-section {
+    padding: 28px 8px 16px;
+  }
+
+  .home-title-v2 {
+    font-size: 2.35rem;
+    line-height: 1.08;
+    letter-spacing: 0;
+  }
+
+  .home-subtitle {
+    max-width: 100%;
+    font-size: 1rem;
+  }
+
+  .role-container-v2 {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    width: 100%;
+    margin-top: 24px;
+  }
+
+  .role-card-v2 {
+    min-height: auto;
+    padding: 18px;
+  }
+
+  .intro-page {
+    min-height: 100vh;
+    padding: 18px;
+  }
+
+  .intro-content {
+    width: min(100%, 420px);
+    padding: 28px 20px;
+    border-radius: 26px;
+  }
+
+  .intro-content h1 {
+    font-size: 1.55rem;
+    line-height: 1.25;
+  }
+
+  .app-container:has(.sidebar) {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .map-wrapper {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .sidebar {
+    top: 12px;
+    left: 12px;
+    width: calc(100vw - 24px);
+    max-height: 48vh;
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .sidebar .title {
+    font-size: 1.35rem;
+  }
+
+  .sidebar-section {
+    padding: 14px;
+  }
+
+  .filter-group h3 {
+    font-size: 1.25rem;
+  }
+
+  .radio-label,
+  .need-tag,
+  .distance-select {
+    min-height: 42px;
+  }
+
+  .role-switch-button {
+    top: auto;
+    right: 12px;
+    bottom: 14px;
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 999px;
+    font-size: 13px;
+  }
+
+  .custom-popup .maplibregl-popup-content {
+    width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px) !important;
+  }
+
+  .popup-content {
+    padding: 14px;
+    font-size: 12px;
+  }
+
+  .popup-title {
+    font-size: 16px;
+  }
+}
