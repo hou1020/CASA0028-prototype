@@ -1,23 +1,25 @@
 import React from 'react';
 
 const categoryColors = {
-  "Children and Young People": "#3b82f6",
-  "Homelessness Support": "#f97316",
-  "Health and Disability Support": "#10b981",
+  "Children and Young People": "#06b6d4",
+  "Homelessness Support": "#10b981",
+  "Health and Disability Support": "#8b5cf6",
   "Older People Support": "#8b5cf6",
   "Faith-Based Organisations": "#64748b",
-  "Poverty Relief": "#ef4444",
+  "Poverty Relief": "#3b82f6",
   "All": "#3b82f6",
-  "Other / General Support": "#94a3b8"
+  "Other / General Support": "#64748b"
 };
+
+const whiteText = { color: '#ffffff' };
 
 const ServiceCategoryFilter = ({ categories, selectedCategory, onCategoryChange }) => {
   return (
-    <section className="sidebar-section">
-      <h4 className="filter-title">Service User Category</h4>
+    <section className="sidebar-section service-category-filter">
+      <h4 className="filter-title" style={whiteText}>Service User Category</h4>
       <div className="filter-group">
-        <h3>Resource Filter</h3>
-        <p className="filter-subtitle">Filter by service user category to improve search accuracy:</p>
+        <h3 style={whiteText}>Resource Filter</h3>
+        <p className="filter-subtitle" style={whiteText}>Filter by service user category to improve search accuracy:</p>
 
         <div className="radio-group">
           {categories.map(category => {
@@ -31,7 +33,7 @@ const ServiceCategoryFilter = ({ categories, selectedCategory, onCategoryChange 
                 style={{
                   borderLeft: `5px solid ${themeColor}`,
                   backgroundColor: isSelected ? `${themeColor}22` : '#0f172a',
-                  color: isSelected ? '#ffffff' : '#cbd5e1',
+                  color: '#ffffff',
                 }}
               >
                 <input
@@ -42,7 +44,7 @@ const ServiceCategoryFilter = ({ categories, selectedCategory, onCategoryChange 
                   onChange={(event) => onCategoryChange(event.target.value)}
                 />
                 <span className="category-dot" style={{ backgroundColor: themeColor }}></span>
-                <span className="radio-text">{category}</span>
+                <span className="radio-text" style={whiteText}>{category}</span>
               </label>
             );
           })}

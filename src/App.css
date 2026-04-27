@@ -1325,3 +1325,26 @@ aside.sidebar input + span {
     background-color: rgba(50, 60, 80, 0.7) !important; 
     border-radius: 15px;
 }
+
+.sidebar .service-category-filter,
+.sidebar .service-category-filter h3,
+.sidebar .service-category-filter h4,
+.sidebar .service-category-filter p,
+.sidebar .service-category-filter label,
+.sidebar .service-category-filter span,
+.sidebar .service-category-filter .radio-text,
+.sidebar .service-category-filter .filter-title,
+.sidebar .service-category-filter .filter-subtitle {
+    color: #ffffff !important;
+}
+
+.sidebar .sidebar-header .update-status,
+.sidebar .sidebar-header .update-status span {
+    color: #000000 !important;
+}
+
+.sidebar .stats-section,
+.sidebar .stats-section p,
+.sidebar .stats-section strong {
+    color: #ffffff !important;
+}
