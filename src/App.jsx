@@ -4,6 +4,15 @@ import Sidebar from './components/Sidebar';
 import MapDisplay from './components/MapDisplay';
 import './App.css';
 
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path) => `${basePath}${path}`;
+const routePath = (pathname) => {
+  const withoutBase = basePath && pathname.startsWith(basePath)
+    ? pathname.slice(basePath.length)
+    : pathname;
+  return withoutBase.replace(/\/$/, '') || '/';
+};
+
 function cleanCategory(rawText) {
   if (!rawText) return "Other / General Support";
   const text = rawText.toLowerCase();
@@ -66,7 +75,7 @@ function FoodbankPage({ role }) {
   ));
 
   useEffect(() => {
-    Papa.parse('/foodbanks.csv', {
+    Papa.parse(withBase('/foodbanks.csv'), {
       download: true,
       header: true,
       skipEmptyLines: true,
@@ -135,7 +144,7 @@ function FoodbankPage({ role }) {
   
   if (loading) return <div className="loading">Building the city support network...</div>;
 
-  const switchTarget = role === 'recipient' ? '/volunteer' : '/recipient';
+  const switchTarget = role === 'recipient' ? withBase('/volunteer') : withBase('/recipient');
   const switchLabel = role === 'recipient' ? 'Switch to Volunteer' : 'Switch to Recipient';
   const lastUpdated = new Date().toLocaleString('en-GB', {
     day: 'numeric', month: 'short'
@@ -171,7 +180,7 @@ function HomePage() {
     <main className="home-page-v2">
       {/* 1. 引用你放在 public 下的图片 */}
       <div className="map-overlay-v3">
-  <img src="/foodbankhelp.png" alt="Foodbank Help Illustration" className="map-image" />
+  <img src={withBase('/foodbankhelp.png')} alt="Foodbank Help Illustration" className="map-image" />
 </div>
       
       <section className="home-content">
@@ -187,7 +196,7 @@ function HomePage() {
 
         <div className="role-container-v2">
           {/* ... 你的两个 role-card-v2 代码保持不变 ... */}
-          <a className="role-card-v2 recipient-v2" href="/recipient">
+          <a className="role-card-v2 recipient-v2" href={withBase('/recipient')}>
             <div className="card-icon">🤝</div>
             <div className="card-text">
               <span className="role-label-v2">I need support</span>
@@ -196,7 +205,7 @@ function HomePage() {
             <div className="card-arrow">→</div>
           </a>
 
-          <a className="role-card-v2 volunteer-v2" href="/volunteer">
+          <a className="role-card-v2 volunteer-v2" href={withBase('/volunteer')}>
             <div className="card-icon">🧡</div>
             <div className="card-text">
               <span className="role-label-v2">I am a volunteer</span>
@@ -211,7 +220,7 @@ function HomePage() {
 }
 
 function App() {
-  const path = window.location.pathname.replace(/\/$/, '') || '/';
+  const path = routePath(window.location.pathname);
   
   // 增加一个状态来控制志愿者过渡页的显示
   const [showVolunteerIntro, setShowVolunteerIntro] = useState(true);
@@ -228,7 +237,7 @@ return (
   <main className="intro-page volunteer-theme">
     {/* ✅ 新加的图片背景层 */}
     <div className="intro-map-overlay">
-      <img src="/volunteer-bg.png" alt="Warm Volunteer Scene" className="intro-bg-image" />
+      <img src={withBase('/volunteer-bg.png')} alt="Warm Volunteer Scene" className="intro-bg-image" />
     </div>
 
     {/* 原有的卡片内容保持不变 */}

@@ -105,7 +105,6 @@ const MapDisplay = ({ data, role }) => {
       // 急需点增加更粗的白色描边，像发光一样
       'circle-stroke-width': ['case', ['get', 'isUrgent'], 4, 1],
       'circle-stroke-color': '#ffffff',
-      'circle-opacity': 0.8,
       'circle-opacity': ['interpolate',['linear'],['zoom'],5, 0.6,12, 0.9]
     }
   };
