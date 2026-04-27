@@ -917,7 +917,7 @@ body, html {
   overflow-wrap: anywhere;
 }
 
-/* 基础变量定义 */
+/* Theme variables */
 :root {
   --volunteer-warm: #ff7e5f;
   --volunteer-gradient: linear-gradient(135deg, #feb47b 0%, #ff7e5f 100%);
@@ -926,13 +926,13 @@ body, html {
   --glass: rgba(255, 255, 255, 0.8);
 }
 
-/* 过渡页样式 */
+/* Intro page styles */
 .intro-page {
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--volunteer-gradient); /* 志愿者主题用暖色 */
+  background: var(--volunteer-gradient); /* Warm gradient for the volunteer theme. */
   font-family: 'Inter', sans-serif;
 }
 
@@ -940,7 +940,7 @@ body, html {
   background: var(--glass);
   backdrop-filter: blur(20px);
   padding: 3rem;
-  border-radius: 40px; /* 大圆角参考图风格 */
+  border-radius: 40px; /* Large radius to match the reference card style. */
   text-align: center;
   box-shadow: 0 20px 50px rgba(0,0,0,0.1);
   max-width: 500px;
@@ -976,7 +976,7 @@ body, html {
   100% { transform: scale(1); }
 }
 
-/* 容器确保有渐变 */
+/* Keep the landing container on the intended gradient. */
 .home-page-v2 {
   position: relative;
   min-height: 100vh;
@@ -984,7 +984,7 @@ body, html {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  /* 强制拉回你的渐变色 */
+  /* Restore the intended gradient colours. */
   background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d) !important;
   background-size: 400% 400% !important;
   animation: gradientBG 15s ease infinite;
@@ -994,37 +994,37 @@ body, html {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;   /* 占满全屏宽 */
-  height: 100vh;  /* 占满全屏高 */
+  width: 100vw;   /* Fill the full viewport width. */
+  height: 100vh;  /* Fill the full viewport height. */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.15;  /* 稍微调低一点，作为背景纹路更高级 */
+  opacity: 0.15;  /* Keep the image subtle as a background texture. */
 }
 
 .map-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 关键：让图片像背景图一样覆盖整个容器，不留白边 */
-  mix-blend-mode: multiply; /* 假设是白底黑线 */
-  /* 如果是黑底白线，请改为 mix-blend-mode: screen; */
+  object-fit: cover; /* Make the image cover the full container like a background. */
+  mix-blend-mode: multiply; /* Works best for dark line art on a light background. */
+  /* Use screen blending instead if the source image is light art on a dark background. */
 }
 
-/* 确保文字内容在图片上面 */
+/* Keep text content above the background image. */
 .home-content {
   position: relative;
   z-index: 10;
 }
 
-/* 标题换行后的间距优化 */
+/* Adjust spacing after the manually wrapped title. */
 .home-title-v2 {
   line-height: 1.1;
   margin-top: 10px;
 }
 
-/* 标题区域 */
+/* Hero title area */
 .home-kicker {
   color: #ffd700;
   text-transform: uppercase;
@@ -1049,18 +1049,18 @@ body, html {
   line-height: 1.6;
 }
 
-/* 卡片容器 */
+/* Role card container */
 .role-container-v2 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* 允许并排 */
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Allow cards to sit side by side. */
   gap: 2.5rem;
-  max-width: 900px; /* 限制卡片区域的总宽度，不要撑得太散 */
-  margin: 3rem auto 0; /* 居中 */
+  max-width: 900px; /* Limit the card group width so it does not spread too far. */
+  margin: 3rem auto 0; /* Centre the card group. */
 }
 
 .role-card-v2 {
   padding: 2rem;
-  /* 保持之前的毛玻璃效果 */
+  /* Preserve the existing frosted-glass effect. */
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
   border-radius: 24px;
@@ -1105,18 +1105,18 @@ body, html {
   opacity: 1;
 }
 
-/* 角色特定颜色边框 */
+/* Role-specific accent borders */
 .recipient-v2 { border-bottom: 6px solid #4facfe; }
 .volunteer-v2 { border-bottom: 6px solid #f093fb; }
 
-/* --- 首页内容增强（悬浮感与清晰度） --- */
+/* Landing content polish for depth and readability */
 .hero-section {
   position: relative;
   z-index: 10;
   padding: 40px 20px;
-  /* 在文字下方加一个柔和的径向阴影，让背景插图不干扰阅读 */
+  /* Add a soft radial shadow behind text so the illustration does not reduce readability. */
   background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, transparent 80%);
-  border-radius: 50%; /* 渐变发散效果 */
+  border-radius: 50%; /* Helps the gradient spread naturally. */
 }
 
 .home-title-v2 {
@@ -1124,7 +1124,7 @@ body, html {
   line-height: 1.1;
   font-weight: 900;
   letter-spacing: -1px;
-  /* 增加文字投影，让白字更有体积感 */
+  /* Add text shadow so white text has stronger contrast. */
   text-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
@@ -1133,7 +1133,7 @@ body, html {
   max-width: 700px;
 }
 
-/* 角色卡片增加悬浮动画 */
+/* Add a lift animation to role cards. */
 .role-card-v2 {
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   border: 1px solid rgba(255,255,255,0.15);
@@ -1141,21 +1141,21 @@ body, html {
 }
 
 .role-card-v2:hover {
-  /* 悬停时稍微发光并上浮 */
+  /* Glow and lift on hover. */
   background: rgba(255, 255, 255, 0.18);
   box-shadow: 0 25px 50px rgba(0,0,0,0.4);
   border-color: rgba(255,255,255,0.4);
 }
 
-/* 志愿者界面专属布局 */
+/* Volunteer page layout */
 .app-container:has(.sidebar) {
-  display: block; /* 取消 flex，让地图全屏 */
+  display: block; /* Remove flex so the map can fill the screen. */
   position: relative;
   height: 100vh;
   width: 100vw;
 }
 
-/* 侧边栏变身为悬浮浮动面板 */
+/* Turn the sidebar into a floating panel. */
 .sidebar {
   position: absolute;
   top: 20px;
@@ -1163,8 +1163,8 @@ body, html {
   width: 320px;
   max-height: calc(100vh - 40px);
   z-index: 100;
-  background: rgba(255, 255, 255, 0.85); /* 半透明白 */
-  backdrop-filter: blur(15px); /* 毛玻璃 */
+  background: rgba(255, 255, 255, 0.85); /* Semi-transparent white. */
+  backdrop-filter: blur(15px); /* Frosted-glass blur. */
   border-radius: 24px;
   padding: 25px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.15);
@@ -1173,13 +1173,13 @@ body, html {
   transition: all 0.3s ease;
 }
 
-/* 志愿者主题的侧边栏顶部 */
+/* Volunteer-themed sidebar header */
 .volunteer-theme .sidebar-header .title {
-  color: #d35400; /* 暖橙色标题 */
+  color: #d35400; /* Warm orange title colour. */
   font-size: 1.5rem;
 }
 
-/* 过滤器选项美化 (Needs Filter) */
+/* Needs filter option polish */
 .filter-item {
   background: white;
   border-radius: 12px;
@@ -1190,15 +1190,15 @@ body, html {
 }
 
 .filter-item:hover {
-  background: #fff5f0; /* 暖色悬停 */
+  background: #fff5f0; /* Warm hover background. */
   border-color: #ff7e5f;
 }
 
-/* 右上角的切换按钮美化 */
+/* Top-right role switch button polish */
 .role-switch-button {
   position: absolute;
   top: 20px;
-  right: 80px; /* 避开地图控制按钮 */
+  right: 80px; /* Avoid overlapping the map controls. */
   z-index: 100;
   padding: 10px 20px;
   background: var(--volunteer-gradient);
@@ -1209,7 +1209,7 @@ body, html {
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
-/* 地图容器铺满全屏 */
+/* Full-screen map container */
 .map-wrapper {
   width: 100vw;
   height: 100vh;
@@ -1218,42 +1218,42 @@ body, html {
   left: 0;
 }
 
-/* 强制侧边栏内所有非按钮文字为深色 */
+/* Force non-button sidebar text to a readable dark colour. */
 .sidebar {
-    color: #2c3e50 !important; /* 深蓝黑色，非常清晰 */
+    color: #2c3e50 !important; /* Dark blue-black for high readability. */
 }
 
-/* 针对“上次更新时间”和状态文字 */
+/* Last-updated and status text */
 .update-status, 
 .sidebar p, 
 .sidebar span:not(.popup-need-icon), 
 .stats-section {
     color: #444 !important; 
-    text-shadow: none !important; /* 去掉可能存在的白色发光，防止模糊 */
+    text-shadow: none !important; /* Remove glow that can make small text blurry. */
 }
 
-/* 针对你截图中看不清的那个“14 days ago”或时间文字 */
+/* Time metadata text */
 .sidebar .time-text, 
 .sidebar .last-updated {
     color: #666 !important;
     font-weight: 500;
 }
 
-/* 过滤器标签的文字也要确保清晰 */
+/* Keep filter label text clear. */
 .filter-label {
     color: #333 !important;
     font-weight: 600;
 }
 
-/* 志愿者页面侧边栏标题点缀 */
+/* Volunteer sidebar title accent */
 .volunteer-theme .sidebar-header h2 {
-    color: #e67e22 !important; /* 暖橙色标题 */
+    color: #e67e22 !important; /* Warm orange title colour. */
     border-bottom: 2px solid #ffcc80;
 }
 
-/* 志愿者主题下的弹窗导航按钮美化 */
+/* Volunteer-themed popup directions button */
 .volunteer-theme-popup .popup-directions-link {
-    background: #e67e22 !important; /* 温暖的橙色 */
+    background: #e67e22 !important; /* Warm orange. */
     color: white !important;
     border-radius: 12px;
     padding: 12px;
@@ -1266,51 +1266,51 @@ body, html {
 }
 
 .volunteer-theme-popup .popup-directions-link:hover {
-    background: #d35400 !important; /* 深橙色 */
+    background: #d35400 !important; /* Darker orange on hover. */
 }
 
-/* --- 志愿者过渡页背景图样式 --- */
+/* Volunteer intro background image */
 
-/* 确保父容器有层级上下文 */
+/* Ensure the parent creates a layering context. */
 .intro-page.volunteer-theme {
     position: relative;
     overflow: hidden;
-    /* 保持你原本的暖色渐变背景 */
+    /* Preserve the warm gradient background. */
 }
 
-/* 图片容器：全屏铺满 */
+/* Full-screen image layer */
 .intro-map-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 1; /* 放在底层 */
-    pointer-events: none; /* 穿透点击 */
-    /* 调低透明度，若隐若现最感人 */
+    z-index: 1; /* Place below the content. */
+    pointer-events: none; /* Let clicks pass through to content. */
+    /* Keep the background image subtle. */
     opacity: 0.15; 
 }
 
 .intro-bg-image {
     width: 100%;
     height: 100%;
-    /* 关键：让图片裁剪铺满，不留白 */
+    /* Crop the image to cover the full screen. */
     object-fit: cover; 
     
-    /* 混合模式：如果是白底黑线稿，用 multiply 让白色变透明 */
+    /* Multiply blending works well for dark line art on a light background. */
     mix-blend-mode: multiply; 
-    /* 如果是黑底白线稿，请改为 mix-blend-mode: screen; */
+    /* Use screen blending instead for light line art on a dark background. */
 }
 
-/* 确保卡片内容在图片上面 */
+/* Keep card content above the image layer. */
 .intro-content {
     position: relative;
-    z-index: 10; /* 比图片层高 */
-    /* 建议给卡片加一点更重的阴影，让它从背景图中浮出来 */
+    z-index: 10; /* Higher than the image layer. */
+    /* Stronger shadow helps the card separate from the background image. */
     box-shadow: 0 30px 60px rgba(0,0,0,0.2);
 }
 
-/* 究极暴力覆盖：强制侧边栏内所有深层元素文字变白 */
+/* Override deep sidebar text where later theme rules need white text. */
 aside.sidebar div, 
 aside.sidebar span, 
 aside.sidebar label, 
@@ -1319,7 +1319,7 @@ aside.sidebar input + span {
     opacity: 1 !important;
 }
 
-/* 针对你截图中那个深色半透明的背景块，如果它太沉重，可以调浅一点 */
+/* Adjust dense translucent sidebar blocks if they feel too visually heavy. */
 .sidebar .service-category-filter, 
 .sidebar .needs-filter {
     background-color: rgba(50, 60, 80, 0.7) !important; 

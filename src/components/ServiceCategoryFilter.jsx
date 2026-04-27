@@ -4,13 +4,14 @@ const categoryColors = {
   "Children and Young People": "#06b6d4",
   "Homelessness Support": "#10b981",
   "Health and Disability Support": "#8b5cf6",
-  "Older People Support": "#8b5cf6",
+  "Older People Support": "#64748b",
   "Faith-Based Organisations": "#64748b",
   "Poverty Relief": "#3b82f6",
   "All": "#3b82f6",
   "Other / General Support": "#64748b"
 };
 
+// Inline white text is kept here because later sidebar CSS uses important overrides.
 const whiteText = { color: '#ffffff' };
 
 const ServiceCategoryFilter = ({ categories, selectedCategory, onCategoryChange }) => {

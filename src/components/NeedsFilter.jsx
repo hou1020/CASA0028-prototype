@@ -29,6 +29,7 @@ const needsConfig = [
 ];
 
 const NeedsFilter = ({ selectedNeeds, onNeedsChange }) => {
+  // Toggle one need tag while preserving the rest of the multi-select state.
   const toggleNeed = (id) => {
     if (selectedNeeds.includes(id)) {
       onNeedsChange(selectedNeeds.filter(item => item !== id));

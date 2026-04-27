@@ -12,6 +12,7 @@ const distanceOptions = [
 
 const DistanceFilter = ({ selectedDistance, onDistanceChange, locationStatus }) => {
   const isLocationReady = locationStatus === 'ready';
+  // Convert geolocation state into concise helper text for the dropdown.
   const statusText = {
     checking: 'Checking your location...',
     ready: 'Using your current location.',

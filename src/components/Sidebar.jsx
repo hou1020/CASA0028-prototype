@@ -28,6 +28,7 @@ const Sidebar = ({
         </div>
       </header>
 
+      {/* Recipient and volunteer routes expose different task-focused filters. */}
       {isRecipient ? (
         <>
           <ServiceCategoryFilter

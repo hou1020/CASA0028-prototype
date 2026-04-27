@@ -8,6 +8,7 @@ const UK_MAP_BOUNDS = [
   [4.2, 62.2]
 ];
 
+// Used for popup category accents.
 const categoryColors = {
   "Children and Young People": "#3b82f6",
   "Homelessness Support": "#f97316",
@@ -17,7 +18,7 @@ const categoryColors = {
   "Poverty Relief": "#ef4444"
 };
 
-// 志愿者模式：暖色调（红、橙、黄）
+// Warm marker palette for the volunteer view.
 const VOLUNTEER_COLOR_MAP = [
   'match',
   ['get', 'charity_purpose'],
@@ -25,10 +26,10 @@ const VOLUNTEER_COLOR_MAP = [
   'Homelessness Support', '#f97316',
   'Health and Disability Support', '#f59e0b',
   'Children and Young People', '#fbbf24',
-  '#fcd34d' // 其他默认颜色
+  '#fcd34d' // Default fallback colour.
 ];
 
-// 受助者模式：冷色调（蓝、绿、紫）
+// Cooler marker palette for the recipient view.
 const RECIPIENT_COLOR_MAP = [
   'match',
   ['get', 'charity_purpose'],
@@ -46,6 +47,7 @@ const MapDisplay = ({ data, role }) => {
     longitude: -2.0, latitude: 54.0, zoom: 5.5
   });
 
+  // Cancel any pending popup close when the pointer enters the popup.
   const clearCloseTimer = useCallback(() => {
     if (closeTimerRef.current) {
       window.clearTimeout(closeTimerRef.current);
@@ -53,6 +55,7 @@ const MapDisplay = ({ data, role }) => {
     }
   }, []);
 
+  // Delay closing so users can move from a marker into the popup links.
   const schedulePopupClose = useCallback(() => {
     clearCloseTimer();
     closeTimerRef.current = window.setTimeout(() => {
@@ -61,6 +64,7 @@ const MapDisplay = ({ data, role }) => {
     }, 250);
   }, [clearCloseTimer]);
 
+  // Start near the user's current location when browser geolocation is available.
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -73,10 +77,12 @@ const MapDisplay = ({ data, role }) => {
     }
   }, []);
 
+  // Clear timers when the map component unmounts.
   useEffect(() => {
     return () => clearCloseTimer();
   }, [clearCloseTimer]);
 
+  // Convert processed food bank rows into GeoJSON for MapLibre.
   const geojsonData = useMemo(() => ({
     type: 'FeatureCollection',
     features: data.map(bank => {
@@ -92,26 +98,25 @@ const MapDisplay = ({ data, role }) => {
     })
   }), [data]);
 
+  // Circle layer styling controls marker size, colour, stroke, and zoom opacity.
   const layerStyle = {
     id: 'foodbank-points',
     type: 'circle',
     paint: {
-      // 如果是志愿者，急需点（isUrgent）半径加大到 15，否则 8
+      // Urgent locations are drawn larger to make active needs stand out.
       'circle-radius': ['case', ['get', 'isUrgent'], 15, 8],
       
-      // 根据角色选择颜色配置
+      // Marker colours switch with the current role.
       'circle-color': role === 'volunteer' ? VOLUNTEER_COLOR_MAP : RECIPIENT_COLOR_MAP,
       
-      // 急需点增加更粗的白色描边，像发光一样
+      // Urgent points get a thicker white outline for extra visibility.
       'circle-stroke-width': ['case', ['get', 'isUrgent'], 4, 1],
       'circle-stroke-color': '#ffffff',
       'circle-opacity': ['interpolate',['linear'],['zoom'],5, 0.6,12, 0.9]
     }
   };
 
-  // 换成这个地址试试，它加载速度更快：
-const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
-
+  // Update popup state when the pointer moves over an interactive map point.
   const onHover = useCallback(event => {
     const { features, lngLat: { lng, lat } } = event;
     const hoveredFeature = features && features[0];
@@ -123,6 +128,7 @@ const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json
     }
   }, [clearCloseTimer, schedulePopupClose]);
 
+  // Render need icons in the popup, greying out categories not detected for a site.
   const renderNeedsIcons = (tagsJson) => {
     const tags = JSON.parse(tagsJson || "{}");
     const icons = [
@@ -168,12 +174,12 @@ const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json
         </Source>
 
         {hoverInfo && (
-          // 在 MapDisplay.jsx 找到 <Popup ...>
+          // Popup remains hover-triggered but can be interacted with before closing.
 <Popup
   longitude={hoverInfo.lng}
   latitude={hoverInfo.lat}
   closeButton={false}
-  /* 使用 .trim() 自动去掉前后的多余空格 */
+  /* Trim avoids an empty class when the recipient view has no extra theme class. */
   className={`custom-popup ${role === 'volunteer' ? 'volunteer-theme-popup' : ''}`.trim()}
 
           >
