@@ -916,3 +916,412 @@ body, html {
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
+
+/* 基础变量定义 */
+:root {
+  --volunteer-warm: #ff7e5f;
+  --volunteer-gradient: linear-gradient(135deg, #feb47b 0%, #ff7e5f 100%);
+  --recipient-cool: #6a85b6;
+  --recipient-gradient: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+  --glass: rgba(255, 255, 255, 0.8);
+}
+
+/* 过渡页样式 */
+.intro-page {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--volunteer-gradient); /* 志愿者主题用暖色 */
+  font-family: 'Inter', sans-serif;
+}
+
+.intro-content {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  padding: 3rem;
+  border-radius: 40px; /* 大圆角参考图风格 */
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+  max-width: 500px;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.heart-icon { font-size: 4rem; margin-bottom: 1rem; animation: pulse 2s infinite; }
+
+.count-badge {
+  color: #e74c3c;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.start-button {
+  margin-top: 2rem;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  border: none;
+  background: #333;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.start-button:hover { transform: scale(1.05); }
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* 容器确保有渐变 */
+.home-page-v2 {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* 强制拉回你的渐变色 */
+  background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d) !important;
+  background-size: 400% 400% !important;
+  animation: gradientBG 15s ease infinite;
+}
+
+.map-overlay-v3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;   /* 占满全屏宽 */
+  height: 100vh;  /* 占满全屏高 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.15;  /* 稍微调低一点，作为背景纹路更高级 */
+}
+
+.map-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 关键：让图片像背景图一样覆盖整个容器，不留白边 */
+  mix-blend-mode: multiply; /* 假设是白底黑线 */
+  /* 如果是黑底白线，请改为 mix-blend-mode: screen; */
+}
+
+/* 确保文字内容在图片上面 */
+.home-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* 标题换行后的间距优化 */
+.home-title-v2 {
+  line-height: 1.1;
+  margin-top: 10px;
+}
+
+/* 标题区域 */
+.home-kicker {
+  color: #ffd700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.home-title-v2 {
+  font-size: clamp(3rem, 8vw, 5rem);
+  color: white;
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.home-subtitle {
+  color: rgba(255,255,255,0.8);
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto 4rem;
+  line-height: 1.6;
+}
+
+/* 卡片容器 */
+.role-container-v2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* 允许并排 */
+  gap: 2.5rem;
+  max-width: 900px; /* 限制卡片区域的总宽度，不要撑得太散 */
+  margin: 3rem auto 0; /* 居中 */
+}
+
+.role-card-v2 {
+  padding: 2rem;
+  /* 保持之前的毛玻璃效果 */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 24px;
+}
+
+.role-card-v2:hover {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255,255,255,0.5);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+}
+
+.card-icon {
+  font-size: 3rem;
+  margin-right: 1.5rem;
+}
+
+.role-label-v2 {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.role-description-v2 {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.card-arrow {
+  margin-left: auto;
+  color: white;
+  font-size: 1.5rem;
+  opacity: 0.5;
+  transition: transform 0.3s;
+}
+
+.role-card-v2:hover .card-arrow {
+  transform: translateX(10px);
+  opacity: 1;
+}
+
+/* 角色特定颜色边框 */
+.recipient-v2 { border-bottom: 6px solid #4facfe; }
+.volunteer-v2 { border-bottom: 6px solid #f093fb; }
+
+/* --- 首页内容增强（悬浮感与清晰度） --- */
+.hero-section {
+  position: relative;
+  z-index: 10;
+  padding: 40px 20px;
+  /* 在文字下方加一个柔和的径向阴影，让背景插图不干扰阅读 */
+  background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, transparent 80%);
+  border-radius: 50%; /* 渐变发散效果 */
+}
+
+.home-title-v2 {
+  font-size: clamp(2.8rem, 6vw, 4.2rem);
+  line-height: 1.1;
+  font-weight: 900;
+  letter-spacing: -1px;
+  /* 增加文字投影，让白字更有体积感 */
+  text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.home-subtitle {
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  max-width: 700px;
+}
+
+/* 角色卡片增加悬浮动画 */
+.role-card-v2 {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.15);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.role-card-v2:hover {
+  /* 悬停时稍微发光并上浮 */
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+  border-color: rgba(255,255,255,0.4);
+}
+
+/* 志愿者界面专属布局 */
+.app-container:has(.sidebar) {
+  display: block; /* 取消 flex，让地图全屏 */
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* 侧边栏变身为悬浮浮动面板 */
+.sidebar {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 320px;
+  max-height: calc(100vh - 40px);
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.85); /* 半透明白 */
+  backdrop-filter: blur(15px); /* 毛玻璃 */
+  border-radius: 24px;
+  padding: 25px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  border: 1px solid rgba(255,255,255,0.4);
+  overflow-y: auto;
+  transition: all 0.3s ease;
+}
+
+/* 志愿者主题的侧边栏顶部 */
+.volunteer-theme .sidebar-header .title {
+  color: #d35400; /* 暖橙色标题 */
+  font-size: 1.5rem;
+}
+
+/* 过滤器选项美化 (Needs Filter) */
+.filter-item {
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  padding: 12px;
+  transition: all 0.2s;
+  border: 1px solid #eee;
+}
+
+.filter-item:hover {
+  background: #fff5f0; /* 暖色悬停 */
+  border-color: #ff7e5f;
+}
+
+/* 右上角的切换按钮美化 */
+.role-switch-button {
+  position: absolute;
+  top: 20px;
+  right: 80px; /* 避开地图控制按钮 */
+  z-index: 100;
+  padding: 10px 20px;
+  background: var(--volunteer-gradient);
+  color: white;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* 地图容器铺满全屏 */
+.map-wrapper {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* 强制侧边栏内所有非按钮文字为深色 */
+.sidebar {
+    color: #2c3e50 !important; /* 深蓝黑色，非常清晰 */
+}
+
+/* 针对“上次更新时间”和状态文字 */
+.update-status, 
+.sidebar p, 
+.sidebar span:not(.popup-need-icon), 
+.stats-section {
+    color: #444 !important; 
+    text-shadow: none !important; /* 去掉可能存在的白色发光，防止模糊 */
+}
+
+/* 针对你截图中看不清的那个“14 days ago”或时间文字 */
+.sidebar .time-text, 
+.sidebar .last-updated {
+    color: #666 !important;
+    font-weight: 500;
+}
+
+/* 过滤器标签的文字也要确保清晰 */
+.filter-label {
+    color: #333 !important;
+    font-weight: 600;
+}
+
+/* 志愿者页面侧边栏标题点缀 */
+.volunteer-theme .sidebar-header h2 {
+    color: #e67e22 !important; /* 暖橙色标题 */
+    border-bottom: 2px solid #ffcc80;
+}
+
+/* 志愿者主题下的弹窗导航按钮美化 */
+.volunteer-theme-popup .popup-directions-link {
+    background: #e67e22 !important; /* 温暖的橙色 */
+    color: white !important;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+    display: block;
+    text-decoration: none;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+}
+
+.volunteer-theme-popup .popup-directions-link:hover {
+    background: #d35400 !important; /* 深橙色 */
+}
+
+/* --- 志愿者过渡页背景图样式 --- */
+
+/* 确保父容器有层级上下文 */
+.intro-page.volunteer-theme {
+    position: relative;
+    overflow: hidden;
+    /* 保持你原本的暖色渐变背景 */
+}
+
+/* 图片容器：全屏铺满 */
+.intro-map-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1; /* 放在底层 */
+    pointer-events: none; /* 穿透点击 */
+    /* 调低透明度，若隐若现最感人 */
+    opacity: 0.15; 
+}
+
+.intro-bg-image {
+    width: 100%;
+    height: 100%;
+    /* 关键：让图片裁剪铺满，不留白 */
+    object-fit: cover; 
+    
+    /* 混合模式：如果是白底黑线稿，用 multiply 让白色变透明 */
+    mix-blend-mode: multiply; 
+    /* 如果是黑底白线稿，请改为 mix-blend-mode: screen; */
+}
+
+/* 确保卡片内容在图片上面 */
+.intro-content {
+    position: relative;
+    z-index: 10; /* 比图片层高 */
+    /* 建议给卡片加一点更重的阴影，让它从背景图中浮出来 */
+    box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+}
+
+/* 究极暴力覆盖：强制侧边栏内所有深层元素文字变白 */
+aside.sidebar div, 
+aside.sidebar span, 
+aside.sidebar label, 
+aside.sidebar input + span {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+/* 针对你截图中那个深色半透明的背景块，如果它太沉重，可以调浅一点 */
+.sidebar .service-category-filter, 
+.sidebar .needs-filter {
+    background-color: rgba(50, 60, 80, 0.7) !important; 
+    border-radius: 15px;
+}

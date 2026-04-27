@@ -35,6 +35,7 @@ function checkUrgency(timestamp) {
   return diffDays <= 14; 
 }
 
+<<<<<<< HEAD
 function getDistanceMiles(origin, latLngText) {
   if (!origin || !latLngText) return null;
 
@@ -54,10 +55,13 @@ function getDistanceMiles(origin, latLngText) {
   return earthRadiusMiles * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+=======
+>>>>>>> e13439c (feat: change color design)
 function FoodbankPage({ role }) {
   const [allData, setAllData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
+<<<<<<< HEAD
   const [selectedNeeds, setSelectedNeeds] = useState([]);
   const [selectedDistance, setSelectedDistance] = useState('all');
   const [userLocation, setUserLocation] = useState(null);
@@ -123,6 +127,58 @@ function FoodbankPage({ role }) {
       return matchCategory && matchNeeds && matchDistance;
     });
   }, [allData, selectedCategory, selectedNeeds, selectedDistance, userLocation]);
+=======
+  
+  const [selectedNeeds, setSelectedNeeds] = useState([]);
+
+  useEffect(() => {
+    Papa.parse('/foodbanks.csv', {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        const processedData = results.data
+          .filter(b => b.lat_lng)
+          .map(bank => {
+            return {
+              ...bank,
+              charity_purpose: cleanCategory(bank.charity_purpose),
+              needsTags: categorizeNeeds(bank.needed_items),
+              isUrgent: checkUrgency(bank.need_found)
+            };
+          });
+        setAllData(processedData);
+        setLoading(false);
+      }
+    });
+  }, []);
+
+  const categories = useMemo(() => {
+    const list = allData.map(b => b.charity_purpose);
+    return ['All', ...new Set(list)];
+  }, [allData]);
+
+  const filteredData = useMemo(() => {
+  return allData.filter(item => {
+    // 1. 类别过滤（保持不变）
+    const matchCategory = selectedCategory === 'All' || item.charity_purpose === selectedCategory;
+    
+    // 2. 需求过滤（保持不变）
+    const matchNeeds = selectedNeeds.length === 0 || 
+                       selectedNeeds.every(tag => item.needsTags[tag]);
+
+    // 3. 【核心修改】角色过滤逻辑
+    // 只要 needsTags 里有任何一个项目是 true，就代表它“有需求”
+    const hasAnySpecificNeed = Object.values(item.needsTags || {}).some(val => val === true);
+    
+    // 如果是志愿者模式：只显示有需求的 (hasAnySpecificNeed 为 true)
+    // 如果是求助者模式：显示所有 (或者你也可以根据需要给求助者也开启这个过滤)
+    const roleFilter = role === 'volunteer' ? hasAnySpecificNeed : true;
+
+    return matchCategory && matchNeeds && roleFilter;
+  });
+}, [allData, selectedCategory, selectedNeeds, role]);
+>>>>>>> e13439c (feat: change color design)
 
   if (loading) return <div className="loading">Building the city support network...</div>;
 
@@ -152,29 +208,48 @@ function FoodbankPage({ role }) {
         {switchLabel}
       </a>
 
-      <MapDisplay data={filteredData} />
-    </div>
+      <MapDisplay data={filteredData} role={role} /> 
+  </div>
   );
 }
 
 function HomePage() {
   return (
-    <main className="home-page">
-      <section className="home-panel" aria-labelledby="home-title">
-        <p className="home-kicker">Community Food Support Network</p>
-        <h1 id="home-title">Choose your role</h1>
-        <p className="home-copy">
-          Enter the page that matches your role. Both pages currently share the map and filtering experience, and can be expanded into separate workflows later.
-        </p>
+    <main className="home-page-v2">
+      {/* 1. 引用你放在 public 下的图片 */}
+      <div className="map-overlay-v3">
+  <img src="/foodbankhelp.png" alt="Foodbank Help Illustration" className="map-image" />
+</div>
+      
+      <section className="home-content">
+        <header className="hero-section">
+          <p className="home-kicker">Welcome to City Hearth</p>
+          {/* 这里我帮你加了 <br /> 实现换行 */}
+          <h1 className="home-title-v2">Pulse of Kindness:<br />Food Security Navigator</h1>
+          <p className="home-subtitle">
+            Connecting those in need with the warmth of the community. 
+            Choose your journey to start making a difference or finding support.
+          </p>
+        </header>
 
-        <div className="role-actions" aria-label="Choose your role">
-          <a className="role-card recipient" href="/recipient">
-            <span className="role-label">I need support</span>
-            <span className="role-description">Find nearby food banks and available support.</span>
+        <div className="role-container-v2">
+          {/* ... 你的两个 role-card-v2 代码保持不变 ... */}
+          <a className="role-card-v2 recipient-v2" href="/recipient">
+            <div className="card-icon">🤝</div>
+            <div className="card-text">
+              <span className="role-label-v2">I need support</span>
+              <span className="role-description-v2">Find nearby food banks and local survival resources.</span>
+            </div>
+            <div className="card-arrow">→</div>
           </a>
-          <a className="role-card volunteer" href="/volunteer">
-            <span className="role-label">I am a volunteer</span>
-            <span className="role-description">View current needs and places where you can help.</span>
+
+          <a className="role-card-v2 volunteer-v2" href="/volunteer">
+            <div className="card-icon">🧡</div>
+            <div className="card-text">
+              <span className="role-label-v2">I am a volunteer</span>
+              <span className="role-description-v2">View real-time needs and help out local food banks.</span>
+            </div>
+            <div className="card-arrow">→</div>
           </a>
         </div>
       </section>
@@ -184,12 +259,39 @@ function HomePage() {
 
 function App() {
   const path = window.location.pathname.replace(/\/$/, '') || '/';
+  
+  // 增加一个状态来控制志愿者过渡页的显示
+  const [showVolunteerIntro, setShowVolunteerIntro] = useState(true);
 
   if (path === '/recipient') {
     return <FoodbankPage role="recipient" />;
   }
 
   if (path === '/volunteer') {
+    // 如果是第一次进入志愿者路径，显示感人页面
+    if (showVolunteerIntro) {
+      // 在 App.jsx 找到志愿者过渡页的 return 部分
+return (
+  <main className="intro-page volunteer-theme">
+    {/* ✅ 新加的图片背景层 */}
+    <div className="intro-map-overlay">
+      <img src="/volunteer-bg.png" alt="Warm Volunteer Scene" className="intro-bg-image" />
+    </div>
+
+    {/* 原有的卡片内容保持不变 */}
+    <div className="intro-content">
+      <div className="heart-icon">🧡</div>
+      <h1>Today, there are <span className="count-badge">12</span> aid stations in need of material assistance</h1>
+      <p className="intro-text">
+        Thank you for your help, your warmth will continue from here.
+      </p>
+      <button className="start-button" onClick={() => setShowVolunteerIntro(false)}>
+        Start My Charitable Action →
+      </button>
+    </div>
+  </main>
+);
+    }
     return <FoodbankPage role="volunteer" />;
   }
 

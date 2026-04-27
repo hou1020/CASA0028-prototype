@@ -17,19 +17,29 @@ const categoryColors = {
   "Poverty Relief": "#ef4444"
 };
 
-const CATEGORY_COLOR_MAP = [
+// 志愿者模式：暖色调（红、橙、黄）
+const VOLUNTEER_COLOR_MAP = [
   'match',
   ['get', 'charity_purpose'],
-  'Children and Young People', '#3b82f6',
-  'Homelessness Support', '#f97316',
-  'Health and Disability Support', '#10b981',
-  'Older People Support', '#8b5cf6',
-  'Faith-Based Organisations', '#64748b',
   'Poverty Relief', '#ef4444',
-  '#94a3b8' 
+  'Homelessness Support', '#f97316',
+  'Health and Disability Support', '#f59e0b',
+  'Children and Young People', '#fbbf24',
+  '#fcd34d' // 其他默认颜色
 ];
 
-const MapDisplay = ({ data }) => {
+// 受助者模式：冷色调（蓝、绿、紫）
+const RECIPIENT_COLOR_MAP = [
+  'match',
+  ['get', 'charity_purpose'],
+  'Poverty Relief', '#3b82f6',
+  'Homelessness Support', '#10b981',
+  'Health and Disability Support', '#8b5cf6',
+  'Children and Young People', '#06b6d4',
+  '#94a3b8'
+];
+
+const MapDisplay = ({ data, role }) => {
   const [hoverInfo, setHoverInfo] = useState(null);
   const closeTimerRef = useRef(null);
   const [viewState, setViewState] = useState({
@@ -86,13 +96,22 @@ const MapDisplay = ({ data }) => {
     id: 'foodbank-points',
     type: 'circle',
     paint: {
-      'circle-radius': ['case', ['get', 'isUrgent'], 12, 8],
-      'circle-color': CATEGORY_COLOR_MAP,
-      'circle-stroke-width': ['case', ['get', 'isUrgent'], 4, 2],
+      // 如果是志愿者，急需点（isUrgent）半径加大到 15，否则 8
+      'circle-radius': ['case', ['get', 'isUrgent'], 15, 8],
+      
+      // 根据角色选择颜色配置
+      'circle-color': role === 'volunteer' ? VOLUNTEER_COLOR_MAP : RECIPIENT_COLOR_MAP,
+      
+      // 急需点增加更粗的白色描边，像发光一样
+      'circle-stroke-width': ['case', ['get', 'isUrgent'], 4, 1],
       'circle-stroke-color': '#ffffff',
-      'circle-opacity': 0.9
+      'circle-opacity': 0.8,
+      'circle-opacity': ['interpolate',['linear'],['zoom'],5, 0.6,12, 0.9]
     }
   };
+
+  // 换成这个地址试试，它加载速度更快：
+const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
 
   const onHover = useCallback(event => {
     const { features, lngLat: { lng, lat } } = event;
@@ -150,11 +169,14 @@ const MapDisplay = ({ data }) => {
         </Source>
 
         {hoverInfo && (
-          <Popup
-            longitude={hoverInfo.lng}
-            latitude={hoverInfo.lat}
-            closeButton={false}
-            className="custom-popup"
+          // 在 MapDisplay.jsx 找到 <Popup ...>
+<Popup
+  longitude={hoverInfo.lng}
+  latitude={hoverInfo.lat}
+  closeButton={false}
+  /* 使用 .trim() 自动去掉前后的多余空格 */
+  className={`custom-popup ${role === 'volunteer' ? 'volunteer-theme-popup' : ''}`.trim()}
+
           >
             <div
               className="popup-content"
@@ -192,6 +214,7 @@ const MapDisplay = ({ data }) => {
                   </p>
                 )}
               </div>
+
 
               <div className="popup-actions">
                 
